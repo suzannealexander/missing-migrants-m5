@@ -5,7 +5,8 @@ const h = 500;
 
 
 
-let svg = d3.select("body").append("svg")
+let svg = d3.select("#missing-viz")
+    .append("svg")
     .attr("width", w + margin.left + margin.right)
     .attr("height", h + margin.top + margin.bottom)
     .append("g")
