@@ -11,7 +11,7 @@ let svg = d3.select("body").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv('data/us_data.csv')
+d3.csv('./data/us_data.csv')
     .then(function (data) {
         data.forEach(d => {
             d.Reported_Year = d['Reported Year'];
