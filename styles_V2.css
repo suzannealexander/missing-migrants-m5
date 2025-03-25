@@ -1,0 +1,203 @@
+
+body, h1, p {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+/* header*/
+header {
+  background-color: white;
+  text-align: center;
+  color: white;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  padding: 15px;
+  font-size: 24px;
+}
+
+/* layout*/
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* 1:2 ratio */
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "left-col right-top"
+    "left-col right-bottom";
+  padding: 20px;
+  gap: 20px;
+}
+
+/* poem */
+.left-column {
+  grid-area: left-col;
+  background-color: white;
+  color: white;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+/* chart */
+.right-column {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: 
+    "box1"
+    "box2";
+  gap: 20px;
+}
+
+#box1 {
+  grid-area: box1;
+}
+
+#box2 {
+  grid-area: box2;
+}
+
+/* chart container */
+.chart-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chart-title {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+#svg, #causeOfDeathSvg {
+  width: 100%;
+  height: 100%;
+}
+
+.left-column-content {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* scroll bar */
+.left-column-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.left-column-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.left-column-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+/* poem style */
+.verse {
+  list-style-type: none;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.line {
+  padding: 6px 0;
+  transition: all 0.3s ease;
+}
+
+/* active verse style */
+.active-verse {
+  background-color: rgba(60, 65, 85, 0.8);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  transform: translateX(5px);
+}
+
+/* active line verse */
+.active-line {
+  color: #ffeb3b;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 5px 8px;
+  border-radius: 4px;
+  transform: translateX(10px);
+}
+
+/* footer style */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #3C4155;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  gap: 15px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* button style */
+.arrow-button {
+  font-size: 16px;
+  padding: 6px 15px;
+  background-color: #5A50B4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.arrow-button:hover {
+  background-color: #483f91;
+}
+
+/* death */
+.death-span {
+  color: #FF5733;
+  font-weight: bold;
+}
+
+/* SVG */
+svg {
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* bar char style */
+.barDead, .barMissing {
+  transition: all 0.3s ease;
+}
+
+.barDead:hover, .barMissing:hover {
+  opacity: 0.8;
+}
+
+/* bar chart style */
+.bar {
+  transition: opacity 0.3s ease;
+}
+
+.bar:hover {
+  opacity: 0.7;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}

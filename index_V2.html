@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Missing Migrants Project</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1 class="title">6 Feet to Freedom</h1>
+    </header>
+    <main class="wrapper">
+      <div class="left-column">
+        <div class="left-column-content">
+          <ul class="verse" id="verse1">
+            <li class="line" id="line1">6 foot deep muddy water</li>
+            <li class="line" id="line2">The only thing standing between freedom and the American dream</li>
+            <li class="line" id="line3">If only Lena could swim <span class="death-span">[Drowning]</span></li>
+            <li class="line" id="line4">Cesar looks up to the sky and clutches his rosary before he plunges in</li>
+          </ul>
+          
+          <ul class="verse" id="verse2">
+            <li class="line" id="line1">30 foot tall wall stretching across the horizon</li>            
+            <li class="line" id="line2">The only thing standing between Zilan and the gangs after him <span class="death-span">[bullet wounds]</span></li>
+            <li class="line" id="line3">He looks down at his bloody leg, shot at by a cholo</li>
+            <li class="line" id="line4">He promised mama he'd make it, he's got to do it</li>
+          </ul>
+          
+          <ul class="verse" id="verse3">
+            <li class="line" id="line1">6 foot tall grass, a turned over safari jeep <span class="death-span">[crash]</span></li>
+            <li class="line" id="line2">The only thing covering 50 migrants crawling on all fours from being spotted by the gangs nearby</li>
+            <li class="line" id="line3">Nida raises her head, mud on her face, to make sure her daughter on her back is doing okay</li>
+            <li class="line" id="line4">Eulich, is in his sixties, he doesn't think he can make it much longer <span class="death-span">[disease]</span></li>
+          </ul>
+
+          <ul class="verse" id="verse4">
+            <li class="line" id="line1">6 capsules of antibiotics and plan B</li>
+            <li class="line" id="line2">The only thing that kept 13 year old Marina from getting pregnant after being raped by men on the journey</li>
+            <li class="line" id="line3">The volunteer doctor takes them from her clenched arms covered in soot at the migrant camp <span class="death-span">[fire]</span></li>
+            <li class="line" id="line4">she cries as she thinks about her teen daughter at home <span class="death-span">[loss]</span></li>
+          </ul>
+          
+          <ul class="verse" id="verse5">   
+            <li class="line" id="line1">6 foot barbed wired fence</li>
+            <li class="line" id="line2">The only thing that stands against the Hernandez family and a better life</li>
+            <li class="line" id="line3">Muddy hands dig….dig desperately beneath the fence</li>
+            <li class="line" id="line4">Muddy bodies crawl and claw under, crawl toward freedom</li>
+          </ul>
+        </div>
+      </div>
+      <div class="right-column">
+        <div id="box1" class="chart-container">
+          <h3 class="chart-title">Deaths and Missing by Year</h3>
+          <svg id="svg"></svg>
+        </div>
+        <div id="box2" class="chart-container">
+          <h3 class="chart-title">Causes of Death</h3>
+          <svg id="causeOfDeathSvg"></svg>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <button class="arrow-button" id="backward-button">◄</button>
+      <button class="arrow-button" id="forward-button">►</button>
+    </footer>
+    <script src="main.js"></script>
+  </body>
+</html>
