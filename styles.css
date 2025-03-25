@@ -1,4 +1,10 @@
 ul {
     list-style-type: none;
   }
-  
+
+
+button {
+  font-size: 1.1em;
+  border-radius: 8px;
+
+}
