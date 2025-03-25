@@ -5,13 +5,14 @@ const h = 500;
 
 
 
-let svg = d3.select("body").append("svg")
+let svg = d3.select("#missing-viz")
+    .append("svg")
     .attr("width", w + margin.left + margin.right)
     .attr("height", h + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv('data/us_data.csv')
+d3.csv('./data/us_data.csv')
     .then(function (data) {
         data.forEach(d => {
             d.Reported_Year = d['Reported Year'];
