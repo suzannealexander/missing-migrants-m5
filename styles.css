@@ -43,7 +43,9 @@ h1{
 
 #viz{
   /*border: solid black 4px;*/
-  height : 650px;
+  margin-top: 150px;
+  margin-bottom: 100px;
+  height : 550px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -180,7 +182,8 @@ header {
 
 .left-column-content {
   max-height: 500px;
-  overflow-y: auto;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 /* scroll bar */
