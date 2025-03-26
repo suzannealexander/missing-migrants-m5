@@ -1,12 +1,47 @@
-// First chart
-const margin = { top: 20, right: 150, bottom: 50, left: 60 };
-const w = 600;
-const h = 300;
+//JS for Audio
+const musicIcon = document.getElementById("music");
+const audioElement = document.getElementById("bg-music");
+
+musicIcon.addEventListener("click", function() {
+    if (audioElement.paused) {
+        audioElement.play();
+        musicIcon.src = "images/volume-mute.png";
+    } else {
+        audioElement.pause();
+        musicIcon.src = "images/musical-note.png";
+    }});
+//-----------------------------------------------------------------------------------
+
+//JS for AI images
+
+// we need to track the images we will use for this vis display 
+
+const images = ["images/horizon.png", "images/cod1.png"];
+let currentIndex = 0;
+
+function updateImage(){
+    document.getElementById("horizon").src = images[currentIndex];
+}
+function prevImage(){
+    currentIndex = (currentIndex - 1) % images.length;
+    updateImage();
+}
+
+function nextImage(){
+    currentIndex = (currentIndex + 1) % images.length;
+    updateImage();
+}
+//-----------------------------------------------------------------------------------
+
+// First chart (Missing by Year)
+const margin = { top: 20, right: 15, bottom: 50, left: 60 };
+const w = 310;
+const h = 250;
 
 // Second chart (Cause of Death)
-const barMargin = { top: 20, right: 150, bottom: 50, left: 60 };
-const barWidth = 600;
-const barHeight = 300;
+const barMargin = { top: 20, right: 15, bottom: 50, left: 60 };
+const barWidth = 310;
+const barHeight = 250;
 
 // Keyframe
 let keyframes = [
@@ -208,29 +243,29 @@ d3.csv('us_data.csv')
             .attr("text-anchor", "middle")
             .attr("transform", "rotate(-90)")
             .text("Frequency");
-
+let legendY = h+50
         // adding a legend
         svg.append("rect")
-            .attr("x", w + 20)
-            .attr("y", 20)
+            .attr("x",  20)
+            .attr("y", legendY)
             .attr("width", 20)
             .attr("height", 20)
             .attr("fill", "steelblue");
             
         svg.append("text")
-            .attr("x", w + 50)
-            .attr("y", 35)
+            .attr("x", 50)
+            .attr("y", legendY + 15)
             .text("Total Dead");
 
         svg.append("rect")
-            .attr("x", w + 20)
-            .attr("y", 50)
+            .attr("x", 20)
+            .attr("y", legendY + 30)
             .attr("width", 20)
             .attr("height", 20)
             .attr("fill", "orange");
         svg.append("text")
-            .attr("x", w + 50)
-            .attr("y", 65)
+            .attr("x", 50)
+            .attr("y", legendY + 45)
             .text("Total Missing");
 
         // preprocessing cause of death data
@@ -328,7 +363,7 @@ d3.csv('us_data.csv')
         // adding a label
         barSvg.append("text")
             .attr("x", barWidth / 2)
-            .attr("y", barHeight + 90)
+            .attr("y", barHeight + 96)
             .attr("text-anchor", "middle")
             .text("Cause of Death");
 

@@ -1,15 +1,85 @@
 
-body, h1, p {
+body{
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  /*background-color: #f5f5f5;*/
+  background-image: url('/images/map-bg.png');
   color: black;
+}
+
+/* Code for music*/
+
+#music {
+ width: 35px;
+ float: right;
+ margin-right: 10px;
+ cursor: pointer;
+ transition: transform 0.1s ease, filter 0.1s ease; 
+}
+
+#music:active{
+  transform: scale(0.95);  /* Slightly shrink the icon on click */
+  filter: brightness(0.8); 
+}
+
+/*AI generated images*/
+
+h1{
+  color: black;
+}
+
+#authors{
+  /*border:solid black;*/
+
+  padding-bottom: -100%;
+  text-align: center;
+  font-style: italic;
+  font-size: 25px;
+  font-weight: bold;
+  color: black;
+  
+}
+
+#viz{
+  /*border: solid black 4px;*/
+  height : 650px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#left-arrow, #right-arrow{
+  height: 60px;
+  width: auto;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+#right-arrow{
+  right: 50px;
+   
+}
+#left-arrow{
+  left: 50px;
+
+}
+
+#horizon{
+  border: solid 8px;
+  display: block;
+  max-width: 70%;
+  padding:0;
+  height:auto;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 /* header*/
 header {
-  background-color: white;
+  /*background-color: white;*/
   text-align: center;
   color: white;
   height: 60px;
@@ -36,6 +106,7 @@ header {
 }
 
 /* poem */
+/*
 .left-column {
   grid-area: left-col;
   background-color: white;
@@ -45,15 +116,15 @@ header {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   height: 100%;
 }
-
+*/
 /* chart */
 .right-column {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas: 
-    "box1"
-    "box2";
-  gap: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 0px;
+  flex-wrap:nowrap;
+  width: 95%;
+
 }
 
 #box1 {
@@ -65,42 +136,70 @@ header {
 }
 
 /* chart container */
-.chart-container {
+/*.chart-container {
   background-color: white;
-  border-radius: 8px;
-  padding: 15px;
+  border-radius: px;
+  padding-right: 1px;
+  padding-bottom: 1px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+*/
+
+.chart-container #svg {
+  background-color:white;
+  border-radius: 10px;
+  padding-right: 0px;
+  padding-left: 5;
+  margin-right: 5%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.chart-container #causeOfDeathSvg {
+  background-color:white;
+  border-radius: 10px;
+  padding-left: 0px;
+  margin-left: 5%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .chart-title {
-  text-align: center;
+  
+  /*left:50px;*/
   margin-bottom: 10px;
-  color: #333;
+  color: black;
+  text-align: center;
+  
 }
 
 #svg, #causeOfDeathSvg {
   width: 100%;
-  height: 100%;
+  height: 80%;
+  background-color: white;
+  display: block;
+  border-radius: 10;
 }
 
 .left-column-content {
-  max-height: 600px;
+  max-height: 500px;
   overflow-y: auto;
 }
 
 /* scroll bar */
 .left-column-content::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
+  color: #483f91;
 }
 
 .left-column-content::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
+  width: 5px;
+  
 }
 
 .left-column-content::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
+  background: black; /* need to fix thickness of bottom scroll bar*/
+  border-radius: 15px;
+  width: 5px;
 }
 
 /* poem style */
@@ -108,7 +207,7 @@ header {
   list-style-type: none;
   padding: 10px;
   margin-bottom: 15px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgb(248, 243, 241); /* regular poem box color*/
   border-radius: 6px;
   transition: all 0.3s ease;
   color:black
