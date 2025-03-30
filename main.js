@@ -58,7 +58,7 @@ let keyframes = [
     {
         activeVerse: 1,
         activeLines: [3],
-        svgUpdate: null
+        svgUpdate: updateDrowningColor
     },
     {
         activeVerse: 1,
@@ -73,7 +73,7 @@ let keyframes = [
     {
         activeVerse: 2,
         activeLines: [2],
-        svgUpdate: null
+        svgUpdate: updateViolenceColor
     },
     {
         activeVerse: 2,
@@ -93,7 +93,7 @@ let keyframes = [
     {
         activeVerse: 3,
         activeLines: [2],
-        svgUpdate: null
+        svgUpdate: updateVehicleAccidentColor
     },
     {
         activeVerse: 3,
@@ -118,7 +118,7 @@ let keyframes = [
     {
         activeVerse: 4,
         activeLines: [3],
-        svgUpdate: null
+        svgUpdate: updateDiseaseColor
     },
     {
         activeVerse: 4,
@@ -128,12 +128,12 @@ let keyframes = [
     {
         activeVerse: 5,
         activeLines: [1],
-        svgUpdate: null
+        svgUpdate: updateExposureColor
     },
     {
         activeVerse: 5,
         activeLines: [2],
-        svgUpdate: null
+        svgUpdate: updateOtherColor
     },
     {
         activeVerse: 5,
@@ -143,7 +143,7 @@ let keyframes = [
     {
         activeVerse: 5,
         activeLines: [4],
-        svgUpdate: null
+        svgUpdate: updateUnknownColor
     }
 ];
 
@@ -332,8 +332,8 @@ let legendY = h+50
 
         // color scale
         const colorScale = d3.scaleOrdinal()
-            .domain(barData.map(d => d.category))
-            .range(d3.schemeCategory10);
+             .domain(barData.map(d => d.category))
+             .range(d3.schemeCategory10); 
 
         // drawing bar chart
         barSvg.selectAll(".bar")
@@ -344,7 +344,7 @@ let legendY = h+50
             .attr("y", d => yBarScale(d.count))
             .attr("width", xBarScale.bandwidth())
             .attr("height", d => barHeight - yBarScale(d.count))
-            .attr("fill", d => colorScale(d.category));
+            .attr("fill", "#AAAAAA");
 
         // adding the x-axis
         barSvg.append("g")
@@ -380,14 +380,18 @@ let legendY = h+50
 function drawKeyframe(kfi) {
     const kf = keyframes[kfi];
     
-
     resetActiveLines();
     
- // active verse update
+    // active verse update
     updateActiveVerse(kf.activeVerse);
     
     for (const line of kf.activeLines) {
         updateActiveLine(kf.activeVerse, line);
+    }
+    
+    // Chart update
+    if (kf.svgUpdate) {
+        kf.svgUpdate();
     }
 }
 
@@ -405,6 +409,42 @@ function updateActiveVerse(id) {
     
     // scroll
     scrollToVerse(id);
+}
+
+// Update Color for Causes of Death bar chart
+function updateDrowningColor() {
+    d3.selectAll(".bar")
+        .attr("fill", d => d.category === "Drowning" ? "dodgerblue" : "gray");
+}
+
+function updateViolenceColor() {
+    d3.selectAll(".bar")
+        .attr("fill", d => d.category === "Violence" ? "red" : "gray");
+}
+
+function updateVehicleAccidentColor() {
+    d3.selectAll(".bar")
+        .attr("fill", d => d.category === "Vehicle Accident" ? "darkoreange" : "gray");
+}
+
+function updateDiseaseColor() {
+    d3.selectAll(".bar")
+        .attr("fill", d => d.category === "Disease/Illness" ? "darkgreen" : "gray");
+}
+
+function updateExposureColor() {
+    d3.selectAll(".bar")
+        .attr("fill", d => d.category === "Exposure/Dehydration" ? "saddlebrown" : "gray");
+}
+
+function updateOtherColor() {
+    d3.selectAll(".bar")
+        .attr("fill", d => d.category === "Other" ? "gold" : "gray");
+}
+
+function updateUnknownColor() {
+    d3.selectAll(".bar")
+        .attr("fill", d => d.category === "Unknown" ? "orange" : "gray");
 }
 
 // Acitve line
