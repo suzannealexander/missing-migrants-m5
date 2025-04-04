@@ -7,22 +7,16 @@
   </head>
   <body>
     <header>
-      <h1 class="title">Missing Migrants Project </h1>
-      <img src = "images/musical-note.png" id = "music"/>
-      <audio id = "bg-music" loop>
-        <source src="images/music.mp3" type="audio/mpeg">
-      </audio>
+      <h1 class="title">The Missing Migrants Project </h1>
     </header>
+    <!-- <p id = "authors"> by Shaniah, Suzanne and Sunghyun
+    </p> -->
 
-    <p id = "authors"> by Shaniah, Suzanne and Sunghyun
-    </p>
-    
-
-    <div id = "viz" name = "viz">
+    <!-- <div id = "viz" name = "viz">
       <img src = "images/left-arrow.png" id = "left-arrow" onclick="prevImage()"/>
       <img src = "images/horizon.png" id = "horizon"/>
       <img src = "images/right-arrow.png" id = "right-arrow" onclick = "nextImage()"/>
-    </div>
+    </div> -->
 
 
     <main class="wrapper">
@@ -68,7 +62,14 @@
       <div class="right-column">
         <div id="box1" class="chart-container">
           <h3 class="chart-title">Deaths & Missing by Year</h3>
+          <div class="svg-container">
           <svg id="svg"></svg>
+          <button class="arrow-button" id="play-button">►</button>
+        </div>
+          <div id="controls">
+          </div>
+          
+          
         </div>
         <div id="box2" class="chart-container">
           <h3 class="chart-title">Causes of Death</h3>
@@ -79,9 +80,13 @@
     <footer>
       <button class="arrow-button" id="backward-button">◄ Previous Line</button>
       <button class="arrow-button" id="forward-button">Next Line ►</button>
+      <img src = "images/musical-note.png" id = "music"/>
+      <audio id = "bg-music" loop>
+        <source src="images/music.mp3" type="audio/mpeg">
+      </audio>
     </footer>
     <script src="main.js"></script>
-    <a href="https://www.flaticon.com/free-icons/music" title="music icons">Music icons created by Freepik - Flaticon</a>
+    <!-- <a href="https://www.flaticon.com/free-icons/music" title="music icons">Music icons created by Freepik - Flaticon</a> -->
 
   </body>
 </html>

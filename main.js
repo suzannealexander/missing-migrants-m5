@@ -5,10 +5,10 @@ const audioElement = document.getElementById("bg-music");
 musicIcon.addEventListener("click", function() {
     if (audioElement.paused) {
         audioElement.play();
-        musicIcon.src = "images/volume-mute.png";
+        musicIcon.src = "images/musical-note.png";
     } else {
         audioElement.pause();
-        musicIcon.src = "images/musical-note.png";
+        musicIcon.src = "images/volume-mute.png";
     }});
 //-----------------------------------------------------------------------------------
 
@@ -37,6 +37,7 @@ function nextImage(){
 const margin = { top: 20, right: 15, bottom: 50, left: 60 };
 const w = 310;
 const h = 250;
+let totals = [];
 
 // Second chart (Cause of Death)
 const barMargin = { top: 20, right: 15, bottom: 50, left: 60 };
@@ -166,6 +167,7 @@ let barSvg = d3.select("#causeOfDeathSvg")
 // load data and make graph
 d3.csv('us_data.csv')
     .then(function (data) {
+
         data.forEach(d => {
             d.Reported_Year = d['Reported Year'];
             d.Number_Dead = d['Number Dead'] ? +d['Number Dead'] : 0;
@@ -173,15 +175,16 @@ d3.csv('us_data.csv')
             d.Cause_of_Death = d['Cause of Death'];
         });
 
+
         // grouping the data by year
         const totalByYear = d3.group(data, d => d.Reported_Year);
 
         // summing the totals for 'Number Dead' and 'Minimum Estimated Number of Missing' by year
-        const totals = Array.from(totalByYear, ([year, records]) => {
+        totals = Array.from(totalByYear, ([year, records]) => {
             const totalDead = d3.sum(records, d => d.Number_Dead);
             const totalMissing = d3.sum(records, d => d.Minimum_Estimated_Number_of_Missing);
             return {
-                year: year,
+                year: +year,
                 totalDead: totalDead,
                 totalMissing: totalMissing
             };
@@ -190,45 +193,75 @@ d3.csv('us_data.csv')
         // sorting years in chronological order
         totals.sort((a,b) => +a.year - +b.year);
 
-        const xScale = d3.scaleBand()// x axis based on years
-            .domain(totals.map(d => d.year))
-            .range([0, w])
-            .padding(0.1);
-
+        // x axis based on years
+        const xScale = d3.scaleLinear()
+        .domain(d3.extent(totals, d => d.year))
+        .range([0, w]);
+       
+        // y axis based on frequency of missing/dead
         const yScale = d3.scaleLinear()
-        .domain([0, d3.max(totals, d => Math.max(d.totalDead, d.totalMissing))]) // setting max value of y-axis for max of either totalDead or totalMissing            .nice()
+            .domain([0, d3.max(totals, d => Math.max(d.totalDead, d.totalMissing))])
+            .nice()    
             .range([h, 0]);
 
-        // appending the bars for totalDead
-        svg.selectAll(".barDead")
-            .data(totals)
-            .enter().append("rect")
-            .attr("class", "barDead")
-            .attr("x", d => xScale(d.year))
-            .attr("y", d => yScale(d.totalDead))
-            .attr("width", xScale.bandwidth() / 2)
-            .attr("height", d => h - yScale(d.totalDead))
-            .attr("fill", "steelblue");
-
-        // appending the bars for totalMissing
-        svg.selectAll(".barMissing")
-            .data(totals)
-            .enter().append("rect")
-            .attr("class", "barMissing")
-            .attr("x", d => xScale(d.year) + xScale.bandwidth() / 2)
-            .attr("y", d => yScale(d.totalMissing))
-            .attr("width", xScale.bandwidth() / 2)
-            .attr("height", d => h - yScale(d.totalMissing))
-            .attr("fill", "orange");
-
-        // adding the x-axis
+        // adding the axes
         svg.append("g")
-            .attr("transform", `translate(0, ${h})`)
-            .call(d3.axisBottom(xScale).ticks(totals.length));
+            .attr("transform", `translate(0,${h})`)
+            .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
 
-        // adding the y-axis
         svg.append("g")
             .call(d3.axisLeft(yScale));
+        
+        // creating lines for dead/missing
+        const lineForDead = d3.line()
+            .x(d => xScale(d.year))
+            .y(d => yScale(d.totalDead))
+            .curve(d3.curveMonotoneX);
+
+        const lineForMissing = d3.line()
+            .x(d => xScale(d.year))
+            .y(d => yScale(d.totalMissing))
+            .curve(d3.curveMonotoneX);
+
+
+        const pathDead = svg.append("path")
+            .datum(totals)
+            .attr("fill", "none")
+            .attr("stroke", "steelblue")
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 2)
+            .attr("d", lineForDead);
+
+        const pathMissing = svg.append("path")
+            .datum(totals)
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 2)
+            .attr("d", lineForMissing);
+    
+            d3.select("#play-button").on("click", animateChart);
+
+
+        function animateChart() {
+
+            let index = 0;
+            function step() {
+                if (index > totals.length) return;
+                const subData = totals.slice(0, index + 1);
+                pathDead.datum(subData).transition().duration(10).attr("d", lineForDead);
+                pathMissing.datum(subData).transition().duration(50).attr("d", lineForMissing);
+                index++;
+                if (index <= totals.length) {
+                    setTimeout(step, 500);
+                }
+            }
+            step();
+        }
+            
+        
 
         // adding axis labels
         svg.append("text")
@@ -262,7 +295,7 @@ let legendY = h+50
             .attr("y", legendY + 30)
             .attr("width", 20)
             .attr("height", 20)
-            .attr("fill", "orange");
+            .attr("fill", "red");
         svg.append("text")
             .attr("x", 50)
             .attr("y", legendY + 45)
@@ -288,24 +321,24 @@ let legendY = h+50
                 return;
             }
             
-            const lowerCause = cause.toLowerCase();
+            const lowerCase = cause.toLowerCase();
             
-            if (lowerCause.includes('drown')) {
+            if (lowerCase.includes('drown')) {
                 causeCategories['Drowning']++;
-            } else if (lowerCause.includes('dehydration') || lowerCause.includes('exposure') || 
-                      lowerCause.includes('heat') || lowerCause.includes('thirst')) {
+            } else if (lowerCase.includes('dehydration') || lowerCase.includes('exposure') || 
+                      lowerCase.includes('heat') || lowerCase.includes('thirst')) {
                 causeCategories['Exposure/Dehydration']++;
-            } else if (lowerCause.includes('violen') || lowerCause.includes('kill') || 
-                      lowerCause.includes('shot') || lowerCause.includes('murder') || 
-                      lowerCause.includes('wound') || lowerCause.includes('gun')) {
+            } else if (lowerCase.includes('violen') || lowerCase.includes('kill') || 
+                      lowerCase.includes('shot') || lowerCase.includes('murder') || 
+                      lowerCase.includes('wound') || lowerCase.includes('gun')) {
                 causeCategories['Violence']++;
-            } else if (lowerCause.includes('vehicle') || lowerCause.includes('car') || 
-                      lowerCause.includes('crash') || lowerCause.includes('accident')) {
+            } else if (lowerCase.includes('vehicle') || lowerCase.includes('car') || 
+                      lowerCase.includes('crash') || lowerCase.includes('accident')) {
                 causeCategories['Vehicle Accident']++;
-            } else if (lowerCause.includes('disease') || lowerCause.includes('illness') || 
-                      lowerCause.includes('sick') || lowerCause.includes('health')) {
+            } else if (lowerCase.includes('disease') || lowerCase.includes('illness') || 
+                      lowerCase.includes('sick') || lowerCase.includes('health')) {
                 causeCategories['Disease/Illness']++;
-            } else if (lowerCause.includes('unknown') || lowerCause.includes('undetermined')) {
+            } else if (lowerCase.includes('unknown') || lowerCase.includes('undetermined')) {
                 causeCategories['Unknown']++;
             } else {
                 causeCategories['Other']++;
@@ -482,7 +515,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById("backward-button").addEventListener("click", backwardClicked);
     document.getElementById("forward-button").addEventListener("click", forwardClicked);
-    
 
     drawKeyframe(keyframeIndex);
 });
