@@ -6,57 +6,44 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
   </head>
   <body>
-    <header>
-      <h1 class="title">The Missing Migrants Project </h1>
-    </header>
-    <!-- <p id = "authors"> by Shaniah, Suzanne and Sunghyun
-    </p> -->
-
-    <!-- <div id = "viz" name = "viz">
-      <img src = "images/left-arrow.png" id = "left-arrow" onclick="prevImage()"/>
-      <img src = "images/horizon.png" id = "horizon"/>
-      <img src = "images/right-arrow.png" id = "right-arrow" onclick = "nextImage()"/>
-    </div> -->
-
 
     <main class="wrapper">
       <div class="left-column">
-        <h1>6 Feet To Freedom</h1>
+        <h1>The Silence After</h1>
         <div class="left-column-content">
           <ul class="verse" id="verse1">
-            <li class="line" id="line1">6 foot deep muddy water</li>
-            <li class="line" id="line2">The only thing standing between freedom and the American dream</li>
-            <li class="line" id="line3">If only Lena could swim</li>
-            <li class="line" id="line4">Cesar looks up to the sky and clutches his rosary before he plunges in</li>
+            <li class="line" id="line1">A wave of panic and dread washes over</li>
+            <li class="line" id="line2">As time marches on</li>
+            <li class="line" id="line3">Loved ones, anxiously waiting by the phone</li>
+            <li class="line" id="line4">Praying that they are protected</li>
           </ul>
           
           <ul class="verse" id="verse2">
-            <li class="line" id="line1">30 foot tall wall stretching across the horizon</li>            
-            <li class="line" id="line2">The only thing standing between Zilan and the gangs after him</li>
-            <li class="line" id="line3">He looks down at his bloody leg, shot at by a cholo</li>
-            <li class="line" id="line4">He promised mama he'd make it, he's got to do it</li>
-          </ul>
-          
-          <ul class="verse" id="verse3">
-            <li class="line" id="line1">6 foot tall grass, a turned over safari jeep</li>
-            <li class="line" id="line2">The only thing covering 50 migrants crawling on all fours from being spotted by the gangs nearby</li>
-            <li class="line" id="line3">Nida raises her head, mud on her face, to make sure her daughter on her back is doing okay</li>
-            <li class="line" id="line4">Eulich, is in his sixties, he doesn't think he can make it much longer</li>
+            <li class="line" id="line1">Time goes by meaninglessly</li>            
+            <li class="line" id="line2">The monotonous television drones on</li>
+            <li class="line" id="line3">Eyes glued to the screen during the news</li>
+            <li class="line" id="line4">Looking for a glimmer of hope</li>
+            <li class="line" id="line5">That their dearly beloved are not just another statistic</li>
+            <li class="line" id="line6">Not part of the hundreds of thousands missing</li>
           </ul>
 
-          <ul class="verse" id="verse4">
-            <li class="line" id="line1">6 capsules of antibiotics and plan B</li>
-            <li class="line" id="line2">The only thing that kept 13 year old Marina from getting pregnant after being raped by men on the journey</li>
-            <li class="line" id="line3">The volunteer doctor takes them from her clenched arms covered in soot at the migrant camp</li>
-            <li class="line" id="line4">she cries as she thinks about her teen daughter at home</li>
+          <ul class="verse" id="verse3">
+            <li class="line" id="line1">Their first birthday away passes</li>
+            <li class="line" id="line2">The house feels eerily hollow</li>
+            <li class="line" id="line3">The halls, that were once boisterous with laughter</li>
+            <li class="line" id="line4">Stand in sorrow</li>
+            <li class="line" id="line5">Everyone's eyes glazed over</li>
+            <li class="line" id="line6">Dulled from the pain of the silence after</li>
           </ul>
           
-          <ul class="verse" id="verse5">   
-            <li class="line" id="line1">6 foot barbed wired fence</li>
-            <li class="line" id="line2">The only thing that stands against the Hernandez family and a better life</li>
-            <li class="line" id="line3">Muddy hands dig….dig desperately beneath the fence</li>
-            <li class="line" id="line4">Muddy bodies crawl and claw under, crawl toward freedom</li>
-          </ul>
+        </div>
+        <div class="poem-controls">
+          <button class="arrow-button" id="backward-button">◄ Previous Line</button>
+          <button class="arrow-button" id="forward-button">Next Line ►</button>
+          <img src="images/musical-note.png" id="music" alt="Music Icon" />
+          <audio id="bg-music" loop>
+            <source src="images/music.mp3" type="audio/mpeg">
+          </audio>
         </div>
       </div>
       <div class="right-column">
@@ -64,29 +51,31 @@
           <h3 class="chart-title">Deaths & Missing by Year</h3>
           <div class="svg-container">
           <svg id="svg"></svg>
+          <div class="tooltip-button-container">
+          <div class="tooltip">?
+            <span class="tooltiptext">While this dataset has 
+              limited information on the true numbers of those missing/passed, 
+              we chose to display this data regardless, to bring attention to the atrocities migrants face</span>
+          </div>          
           <button class="arrow-button" id="play-button">►</button>
         </div>
-          <div id="controls">
-          </div>
-          
-          
+        </div>
         </div>
         <div id="box2" class="chart-container">
           <h3 class="chart-title">Causes of Death</h3>
           <svg id="causeOfDeathSvg"></svg>
         </div>
+    
+      <div id="box3" class="chart-container">
+        <h3 class="chart-title">Articles Over Time</h3>
+        <svg id="articlesSvg"></svg>
       </div>
+    </div>
+  </div>
+
     </main>
-    <footer>
-      <button class="arrow-button" id="backward-button">◄ Previous Line</button>
-      <button class="arrow-button" id="forward-button">Next Line ►</button>
-      <img src = "images/musical-note.png" id = "music"/>
-      <audio id = "bg-music" loop>
-        <source src="images/music.mp3" type="audio/mpeg">
-      </audio>
-    </footer>
+
     <script src="main.js"></script>
-    <!-- <a href="https://www.flaticon.com/free-icons/music" title="music icons">Music icons created by Freepik - Flaticon</a> -->
 
   </body>
 </html>

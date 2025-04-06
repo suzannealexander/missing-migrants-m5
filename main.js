@@ -34,15 +34,19 @@ function nextImage(){
 //-----------------------------------------------------------------------------------
 
 // First chart (Missing by Year)
-const margin = { top: 20, right: 15, bottom: 50, left: 60 };
-const w = 310;
-const h = 250;
+const margin = { top: 20, right: 10, bottom: 50, left: 60 };
+const w = 650;
+const h = 370;
 let totals = [];
 
 // Second chart (Cause of Death)
 const barMargin = { top: 20, right: 15, bottom: 50, left: 60 };
 const barWidth = 310;
-const barHeight = 250;
+const barHeight = 300;
+
+// variables for the animated time chart
+let pathDead, pathMissing, lineForDead, lineForMissing;
+
 
 // Keyframe
 let keyframes = [
@@ -54,7 +58,7 @@ let keyframes = [
     {
         activeVerse: 1,
         activeLines: [2],
-        svgUpdate: null
+        svgUpdate: animateChart
     },
     {
         activeVerse: 1,
@@ -87,6 +91,16 @@ let keyframes = [
         svgUpdate: null
     },
     {
+        activeVerse: 2,
+        activeLines: [5],
+        svgUpdate: null
+    },
+    {
+        activeVerse: 2,
+        activeLines: [6],
+        svgUpdate: null
+    },
+    {
         activeVerse: 3,
         activeLines: [1],
         svgUpdate: null
@@ -107,45 +121,15 @@ let keyframes = [
         svgUpdate: null
     },
     {
-        activeVerse: 4,
-        activeLines: [1],
+        activeVerse: 3,
+        activeLines: [5],
         svgUpdate: null
     },
     {
-        activeVerse: 4,
-        activeLines: [2],
+        activeVerse: 3,
+        activeLines: [6],
         svgUpdate: null
     },
-    {
-        activeVerse: 4,
-        activeLines: [3],
-        svgUpdate: updateDiseaseColor
-    },
-    {
-        activeVerse: 4,
-        activeLines: [4],
-        svgUpdate: null
-    },
-    {
-        activeVerse: 5,
-        activeLines: [1],
-        svgUpdate: updateExposureColor
-    },
-    {
-        activeVerse: 5,
-        activeLines: [2],
-        svgUpdate: updateOtherColor
-    },
-    {
-        activeVerse: 5,
-        activeLines: [3],
-        svgUpdate: null
-    },
-    {
-        activeVerse: 5,
-        activeLines: [4],
-        svgUpdate: updateUnknownColor
-    }
 ];
 
 let keyframeIndex = 0;
@@ -213,18 +197,18 @@ d3.csv('us_data.csv')
             .call(d3.axisLeft(yScale));
         
         // creating lines for dead/missing
-        const lineForDead = d3.line()
+        lineForDead = d3.line()
             .x(d => xScale(d.year))
             .y(d => yScale(d.totalDead))
             .curve(d3.curveMonotoneX);
 
-        const lineForMissing = d3.line()
+        lineForMissing = d3.line()
             .x(d => xScale(d.year))
             .y(d => yScale(d.totalMissing))
             .curve(d3.curveMonotoneX);
 
 
-        const pathDead = svg.append("path")
+        pathDead = svg.append("path")
             .datum(totals)
             .attr("fill", "none")
             .attr("stroke", "steelblue")
@@ -233,7 +217,7 @@ d3.csv('us_data.csv')
             .attr("stroke-width", 2)
             .attr("d", lineForDead);
 
-        const pathMissing = svg.append("path")
+        pathMissing = svg.append("path")
             .datum(totals)
             .attr("fill", "none")
             .attr("stroke", "red")
@@ -244,24 +228,6 @@ d3.csv('us_data.csv')
     
             d3.select("#play-button").on("click", animateChart);
 
-
-        function animateChart() {
-
-            let index = 0;
-            function step() {
-                if (index > totals.length) return;
-                const subData = totals.slice(0, index + 1);
-                pathDead.datum(subData).transition().duration(10).attr("d", lineForDead);
-                pathMissing.datum(subData).transition().duration(50).attr("d", lineForMissing);
-                index++;
-                if (index <= totals.length) {
-                    setTimeout(step, 500);
-                }
-            }
-            step();
-        }
-            
-        
 
         // adding axis labels
         svg.append("text")
@@ -276,7 +242,8 @@ d3.csv('us_data.csv')
             .attr("text-anchor", "middle")
             .attr("transform", "rotate(-90)")
             .text("Frequency");
-let legendY = h+50
+        
+        let legendY = h+50
         // adding a legend
         svg.append("rect")
             .attr("x",  20)
@@ -364,7 +331,7 @@ let legendY = h+50
             .range([barHeight, 0]);
 
         // color scale
-        const colorScale = d3.scaleOrdinal()
+        d3.scaleOrdinal()
              .domain(barData.map(d => d.category))
              .range(d3.schemeCategory10); 
 
@@ -406,7 +373,103 @@ let legendY = h+50
             .attr("text-anchor", "middle")
             .attr("transform", "rotate(-90)")
             .text("Frequency");
+        
+        const dots = [];
+
+
+        const grouped = d3.group(data, d => d["Reported Year"]);
+
+        grouped.forEach((entries, year) => {
+            entries.forEach((d, i) => {
+                const urls = d.URL?.split(",").map(u => u.trim()) ?? [];
+                dots.push({
+                    year: year,
+                    yIndex: i,
+                    urls: urls,
+                    original: d
+                });
+            });
+        });
+
+        const years = Array.from(grouped.keys()).sort();
+        const maxStack = d3.max(Array.from(grouped.values(), v => v.length));
+        const freqHeight = 450; 
+
+
+        const freqMargin = { top: 20, right: 15, bottom: 50, left: 60 };
+        const freqWidth = 720;
+
+
+        let freqSvg = d3.select("#articlesSvg")
+        .attr("width", freqWidth + freqMargin.left + freqMargin.right)
+        .attr("height", freqHeight + freqMargin.top + freqMargin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + freqMargin.left + "," + freqMargin.top + ")");
+
+
+
+        const xScaleFreq = d3.scaleBand()
+            .domain(years)
+            .range([0, freqWidth])
+            .padding(0.3);
+        
+        const yScaleFreq = d3.scaleLinear()
+            .domain([0, maxStack])
+            .range([freqHeight, 0]);
+            
+
+        freqSvg.append("g")
+            .attr("transform", `translate(0,${freqHeight})`)
+            .call(d3.axisBottom(xScaleFreq));
+    
+        freqSvg.append("g")
+            .call(d3.axisLeft(yScaleFreq).ticks(5));
+
+        freqSvg.selectAll("circle")
+            .data(dots)
+            .enter()
+            .append("circle")
+            .attr("cx", d => xScaleFreq(d.year) + xScaleFreq.bandwidth() / 2)
+            .attr("cy", d => yScaleFreq(d.yIndex))
+            .attr("r", 8)
+            .attr("fill", "steelblue")
+            .style("cursor", "pointer")
+            .on("mouseover", function (event, d) {
+                d3.select(this).attr("fill", "orange");
+            })
+            .on("mouseout", function (event, d) {
+                d3.select(this).attr("fill", "steelblue");
+            })
+            .on("click", function (event, d) {
+                d.urls.forEach(url => window.open(url, "_blank"));
+            });
     })
+
+function animateChart() {
+    let index = 0;
+
+    function step() {
+        if (index > totals.length) return;
+
+        const subData = totals.slice(0, index + 1);
+        if (subData.length > 0) {
+            pathDead.datum(subData)
+                .transition().duration(10)
+                .attr("d", d => lineForDead(d));
+
+            pathMissing.datum(subData)
+                .transition().duration(50)
+                .attr("d", d => lineForMissing(d));
+        }
+
+        index++;
+        if (index <= totals.length) {
+            setTimeout(step, 500);
+        }
+    }
+
+    step();
+}
 
 
 // drawing key frame
