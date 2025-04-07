@@ -311,42 +311,156 @@ d3.csv('us_data.csv')
                 causeCategories['Other']++;
             }
         });
+// data for year and death
+const yearCauseData = {};
+const causeYears = ["2014", "2015", "2016", "2017", "2018", "2019"];
 
-        // data for bar chart
-        const barData = Object.entries(causeCategories)
-            .map(([category, count]) => ({ category, count }))
-            .filter(d => d.count > 0)
-            .sort((a, b) => b.count - a.count);
+// data structure
+causeYears.forEach(year => {
+    yearCauseData[year] = {
+        'Drowning': 0,
+        'Violence': 0,
+        'Exposure/Dehydration': 0,
+        'Vehicle Accident': 0,
+        'Disease/Illness': 0,
+        'Unknown': 0,
+        'Other': 0
+    };
+});
+        // data
+        data.forEach(d => {
+            const year = d.Reported_Year;
+            if (!causeYears.includes(year)) return;  // if year is not defined, pass
+            
+            const cause = d.Cause_of_Death;
+            if (!cause) {
+                yearCauseData[year]['Unknown']++;
+                return;
+            }
+            
+            const lowerCase = cause.toLowerCase();
+            
+            if (lowerCase.includes('drown')) {
+                yearCauseData[year]['Drowning']++;
+            } else if (lowerCase.includes('dehydration') || lowerCase.includes('exposure') || 
+                    lowerCase.includes('heat') || lowerCase.includes('thirst')) {
+                yearCauseData[year]['Exposure/Dehydration']++;
+            } else if (lowerCase.includes('violen') || lowerCase.includes('kill') || 
+                    lowerCase.includes('shot') || lowerCase.includes('murder') || 
+                    lowerCase.includes('wound') || lowerCase.includes('gun')) {
+                yearCauseData[year]['Violence']++;
+            } else if (lowerCase.includes('vehicle') || lowerCase.includes('car') || 
+                    lowerCase.includes('crash') || lowerCase.includes('accident')) {
+                yearCauseData[year]['Vehicle Accident']++;
+            } else if (lowerCase.includes('disease') || lowerCase.includes('illness') || 
+                    lowerCase.includes('sick') || lowerCase.includes('health')) {
+                yearCauseData[year]['Disease/Illness']++;
+            } else if (lowerCase.includes('unknown') || lowerCase.includes('undetermined')) {
+                yearCauseData[year]['Unknown']++;
+            } else {
+                yearCauseData[year]['Other']++;
+            }
+        });
 
-        // adding the x-axis
+        // data for each category
+        const categories = Object.keys(causeCategories).filter(key => causeCategories[key] > 0);
+        const stackData = [];
+
+        categories.forEach(category => {
+            const yearData = {};
+            causeYears.forEach(year => {
+                yearData[year] = yearCauseData[year][category] || 0;
+            });
+            
+            stackData.push({
+                category: category,
+                ...yearData,
+                total: Object.values(yearData).reduce((sum, val) => sum + val, 0)
+            });
+        });
+
+        // sort data
+        stackData.sort((a, b) => b.total - a.total);
+
+        // year to colors
+        const causeYearColors = {
+            "2014": "#3366cc",
+            "2015": "#dc3912",
+            "2016": "#ff9900",
+            "2017": "#109618",
+            "2018": "#990099",
+            "2019": "#0099c6"
+        };
+        const defaultGray = "#AAAAAA";
+        
+
+        // x axis scale
         const xBarScale = d3.scaleBand()
-            .domain(barData.map(d => d.category))
+            .domain(stackData.map(d => d.category))
             .range([0, barWidth])
             .padding(0.1);
 
-        // adding the y-axis
+        // y axis scale
+        const maxTotal = d3.max(stackData, d => d.total);
         const yBarScale = d3.scaleLinear()
-            .domain([0, d3.max(barData, d => d.count)])
+            .domain([0, maxTotal])
             .nice()
             .range([barHeight, 0]);
 
-        // color scale
-        d3.scaleOrdinal()
-             .domain(barData.map(d => d.category))
-             .range(d3.schemeCategory10); 
+        // drawing stacked bar 
+        stackData.forEach(categoryData => {
+            const category = categoryData.category;
+            let cumulative = 0;
+            
+            // stacked by year
+            causeYears.forEach(year => {
+                const value = categoryData[year];
+                if (value <= 0) return;  // pass if value is not defiend
+                
+            
+                const start = cumulative;
+                cumulative += value;
+                
+                // drawing bar
+                barSvg.append("rect")
+                    .attr("class", "year-bar")
+                    .attr("data-category", category)
+                    .attr("data-year", year)
+                    .attr("x", xBarScale(category))
+                    .attr("y", yBarScale(cumulative))
+                    .attr("width", xBarScale.bandwidth())
+                    .attr("height", yBarScale(start) - yBarScale(cumulative))
+                    .attr('fill',defaultGray)
+                    .attr("fill", causeYearColors[year])
+                    .attr("stroke", "white")
+                    .attr("stroke-width", 0.5);
+            });
+            
+           
+        });
 
-        // drawing bar chart
-        barSvg.selectAll(".bar")
-            .data(barData)
-            .enter().append("rect")
-            .attr("class", "bar")
-            .attr("x", d => xBarScale(d.category))
-            .attr("y", d => yBarScale(d.count))
-            .attr("width", xBarScale.bandwidth())
-            .attr("height", d => barHeight - yBarScale(d.count))
-            .attr("fill", "#AAAAAA");
+        // legend for each year
+        const legendSpacing = 80;
+        const legendY2 = barHeight + 60;
 
-        // adding the x-axis
+        causeYears.forEach((year, i) => {
+            // legend blcok
+            barSvg.append("rect")
+                .attr("x", i * legendSpacing)
+                .attr("y", legendY2)
+                .attr("width", 15)
+                .attr("height", 15)
+                .attr("fill", causeYearColors[year]);
+            
+            // legend text
+            barSvg.append("text")
+                .attr("x", i * legendSpacing + 20)
+                .attr("y", legendY2 + 12)
+                .attr("font-size", "12px")
+                .text(year);
+        });
+
+        // drawing x
         barSvg.append("g")
             .attr("transform", `translate(0, ${barHeight})`)
             .call(d3.axisBottom(xBarScale))
@@ -356,14 +470,14 @@ d3.csv('us_data.csv')
             .attr("dx", "-.8em")
             .attr("dy", ".15em");
 
-        // adding the y-axis
+        // y
         barSvg.append("g")
             .call(d3.axisLeft(yBarScale));
 
-        // adding a label
+        // label
         barSvg.append("text")
             .attr("x", barWidth / 2)
-            .attr("y", barHeight + 96)
+            .attr("y", barHeight + 40)
             .attr("text-anchor", "middle")
             .text("Cause of Death");
 
@@ -373,6 +487,8 @@ d3.csv('us_data.csv')
             .attr("text-anchor", "middle")
             .attr("transform", "rotate(-90)")
             .text("Frequency");
+
+        
         
         const dots = [];
 
@@ -507,42 +623,34 @@ function updateActiveVerse(id) {
     scrollToVerse(id);
 }
 
-// Update Color for Causes of Death bar chart
+
 function updateDrowningColor() {
-    d3.selectAll(".bar")
-        .attr("fill", d => d.category === "Drowning" ? "dodgerblue" : "gray");
+    showCategoryColors("Drowning");
 }
 
 function updateViolenceColor() {
-    d3.selectAll(".bar")
-        .attr("fill", d => d.category === "Violence" ? "red" : "gray");
+    showCategoryColors("Violence");
 }
 
 function updateVehicleAccidentColor() {
-    d3.selectAll(".bar")
-        .attr("fill", d => d.category === "Vehicle Accident" ? "darkoreange" : "gray");
+    showCategoryColors("Vehicle Accident");
 }
 
 function updateDiseaseColor() {
-    d3.selectAll(".bar")
-        .attr("fill", d => d.category === "Disease/Illness" ? "darkgreen" : "gray");
+    showCategoryColors("Disease/Illness");
 }
 
 function updateExposureColor() {
-    d3.selectAll(".bar")
-        .attr("fill", d => d.category === "Exposure/Dehydration" ? "saddlebrown" : "gray");
+    showCategoryColors("Exposure/Dehydration");
 }
 
 function updateOtherColor() {
-    d3.selectAll(".bar")
-        .attr("fill", d => d.category === "Other" ? "gold" : "gray");
+    showCategoryColors("Other");
 }
 
 function updateUnknownColor() {
-    d3.selectAll(".bar")
-        .attr("fill", d => d.category === "Unknown" ? "orange" : "gray");
+    showCategoryColors("Unknown");
 }
-
 // Acitve line
 function updateActiveLine(vid, lid) {
     const thisVerse = d3.select("#verse" + vid);
