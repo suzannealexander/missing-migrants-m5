@@ -441,7 +441,7 @@ causeYears.forEach(year => {
 
         // legend for each year
         const legendSpacing = 80;
-        const legendY2 = barHeight + 60;
+        const legendY2 = barHeight + 90;
 
         causeYears.forEach((year, i) => {
             // legend blcok
@@ -476,8 +476,8 @@ causeYears.forEach(year => {
 
         // label
         barSvg.append("text")
-            .attr("x", barWidth / 2)
-            .attr("y", barHeight + 40)
+            .attr("x", barWidth * 3/4 +130)
+            .attr("y", barHeight + 20)
             .attr("text-anchor", "middle")
             .text("Cause of Death");
 
