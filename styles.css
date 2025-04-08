@@ -440,24 +440,6 @@ ul {
 }
 
 
-@media screen and (max-width: 768px) {
-  .left-column .line {
-    font-size: 16px;
-  }
-  .wrapper {
-    grid-template-columns: 1fr;
-  }
-
-  .right-column {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-  }
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
 .chart-container .x-axis text {
   font-size: 16px;
   fill: black;
@@ -489,11 +471,4 @@ ul {
   padding: 20px;
   overflow-x: hidden;
   gap: 20px;
-}
-
-
-
-.left-column, .right-column {
-  border: 2px dashed red;
-  width:100%;
 }
