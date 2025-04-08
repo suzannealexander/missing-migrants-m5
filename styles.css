@@ -93,13 +93,21 @@ header {
 /* poem */
 
 /* chart */
-.right-column {
+/* .right-column {
   display: grid;
   grid-template-rows: repeat(3, auto);
   gap: 0px;
-}
+} */
 
-#box1 {
+.right-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+} 
+
+
+/* #box1 {
   grid-row: 1/2;
   grid-column: 1/2;
   margin-left: -130px;
@@ -116,19 +124,55 @@ header {
   grid-column: 1/2;
   margin-left: -350px;
   margin-top: -260px;
+  
+} */
+#box1 {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  max-width: 100%;
 }
 
+#box2 {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  max-width: 100%;
+}
+
+#box3 {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  margin: 0;
+  max-width: 100%;
+  padding-bottom: 50px;
+}
 .chart-container svg {
   background-color: white;
   display: block;
   border-radius: 10px;
 }
-
-.svg-container {
+.responsive-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+/* .svg-container {
   position: relative;
   width: 75%;
   height: 400px;
+} */
+.svg-container {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
 }
+
+.svg-container svg {
+  width: 100%;
+  height: auto;
+}
+
 
 #play-button {
   /* position: relative;
@@ -147,11 +191,12 @@ header {
 }
 
 .chart-container #causeOfDeathSvg {
-  background-color:white;
+  background-color: white;
   border-radius: 10px;
   padding-left: 0px;
   margin-left: 5%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 .chart-title {
@@ -173,11 +218,10 @@ header {
 
 #causeOfDeathSvg {
   width: 100%;
-  height: 80%;
-  background-color: white;
-  display: block;
-  border-radius: 10;
+  height: auto;
+  max-height: auto;
 }
+
 
 .left-column-content {
   padding:20px;
