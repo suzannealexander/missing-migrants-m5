@@ -34,7 +34,7 @@ function nextImage(){
 //-----------------------------------------------------------------------------------
 
 // First chart (Missing by Year)
-const margin = { top: 50, right: 10, bottom: 130, left: 60 };
+const margin = { top: 50, right: 20, bottom: 130, left: 60 };
 const w = 650;
 const h = 450;
 let totals = [];
@@ -134,7 +134,7 @@ let keyframes = [
 
 let keyframeIndex = 0;
 
-// svg
+// first svg
 let svg = d3.select("#svg")
     .attr("viewBox", "0 0 " + (w + margin.left + margin.right) + " " + (h + margin.top + margin.bottom))
     .attr("preserveAspectRatio", "xMidYMid meet")
@@ -192,6 +192,7 @@ d3.csv('us_data.csv')
 
         // adding the axes
         svg.append("g")
+            .attr("class", "x-axis")
             .attr("transform", `translate(0,${h})`)
             .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
 
@@ -451,7 +452,7 @@ causeYears.forEach(year => {
         const legendStartX = barHeight - 560;
 
         causeYears.forEach((year, i) => {
-            // legend blcok
+            // legend block
             barSvg.append("rect")
                 .attr("x", i * legendSpacing)
                 .attr("x", legendStartX + (i * legendSpacing))
@@ -465,16 +466,17 @@ causeYears.forEach(year => {
                 .attr("x", i * legendSpacing + 20)
                 .attr("x", legendStartX + (i * legendSpacing) + 20)
                 .attr("y", legendY2 + 12)
-                .attr("font-size", "12px")
+                .attr("font-size", "16px")
                 .text(year);
         });
 
         // drawing x
         barSvg.append("g")
+            .attr("class", "x-axis")
             .attr("transform", `translate(0, ${barHeight})`)
             .call(d3.axisBottom(xBarScale))
             .selectAll("text")
-            .attr("transform", "rotate(-45)")
+            .attr("transform", "rotate(-30)")
             .style("text-anchor", "end")
             .attr("dx", "-.8em")
             .attr("dy", ".15em");
