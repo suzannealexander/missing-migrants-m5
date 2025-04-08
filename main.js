@@ -509,11 +509,11 @@ causeYears.forEach(year => {
 
         const years = Array.from(grouped.keys()).sort();
         const maxStack = d3.max(Array.from(grouped.values(), v => v.length));
-        const freqHeight = 450; 
+        const freqHeight = 400; 
 
 
         const freqMargin = { top: 20, right: 15, bottom: 50, left: 60 };
-        const freqWidth = 720;
+        const freqWidth = 520;
 
 
         let freqSvg = d3.select("#articlesSvg")
