@@ -427,3 +427,20 @@ ul {
 .poem-controls .arrow-button:last-child {
   margin-right: 0;
 }
+
+/*tooltip position svg*/
+
+.svg-container {
+  position: relative;
+}
+
+.tooltip-button-container {
+  position: absolute;
+  top: 100px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  z-index: 100;
+}
