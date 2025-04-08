@@ -260,7 +260,7 @@ header {
 /* poem style */
 .verse {
   width: 100%;
-  max-width: 600px;
+  max-width: 650px;
   list-style-type: none;
   padding: 10px;
   margin-bottom: 15px;
@@ -447,7 +447,7 @@ ul {
 }
 
 .left-column .line {
-  font-size: 18px;
+  font-size: 19px;
   line-height: 1.6;
 }
 
