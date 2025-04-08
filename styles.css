@@ -468,9 +468,19 @@ ul {
   line-height: 1.6;
 }
 
-
 .left-column {
+  grid-area: left;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  min-width: 300px;
+  flex: 1;
+}
+
+.right-column {
+  grid-area: right;
+}
+
+.left-column, .right-column {
+  border: 2px dashed red;
 }
