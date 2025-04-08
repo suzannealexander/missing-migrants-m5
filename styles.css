@@ -91,7 +91,7 @@ header {
 /* layout*/
 .wrapper {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
+  grid-template-columns: 1.4fr 1.6fr;
   padding: 20px;
   overflow-x: hidden;
   gap: 20px;
@@ -441,6 +441,9 @@ ul {
 
 
 @media screen and (max-width: 768px) {
+  .left-column .line {
+    font-size: 16px;
+  }
   .wrapper {
     grid-template-columns: 1fr;
   }
@@ -457,5 +460,10 @@ ul {
 
 .chart-container .x-axis text {
   font-size: 16px;
-  fill: black; /* optional for better contrast */
+  fill: black;
+}
+
+.left-column .line {
+  font-size: 18px;
+  line-height: 1.6;
 }
