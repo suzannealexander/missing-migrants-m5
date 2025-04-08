@@ -34,13 +34,13 @@ function nextImage(){
 //-----------------------------------------------------------------------------------
 
 // First chart (Missing by Year)
-const margin = { top: 20, right: 10, bottom: 50, left: 60 };
+const margin = { top: 50, right: 10, bottom: 130, left: 60 };
 const w = 650;
 const h = 450;
 let totals = [];
 
 // Second chart (Cause of Death)
-const barMargin = { top: 20, right: 5, bottom: 120, left: 60 };
+const barMargin = { top: 20, right: 5, bottom: 170, left: 60 };
 const barWidth = 750;
 const barHeight = 550;
 
@@ -228,7 +228,11 @@ d3.csv('us_data.csv')
             .attr("stroke-width", 2)
             .attr("d", lineForMissing);
     
-            d3.select("#play-button").on("click", animateChart);
+            d3.select("#play-button")
+                .style("position", "absolute")
+                .style("top", "-4px")
+                .style("right", "48px")
+                .on("click", animateChart);
 
 
         // adding axis labels
@@ -245,7 +249,7 @@ d3.csv('us_data.csv')
             .attr("transform", "rotate(-90)")
             .text("Frequency");
         
-        let legendY = h-100
+        let legendY = h+50
         // adding a legend
         svg.append("rect")
             .attr("x",  20)
@@ -443,8 +447,8 @@ causeYears.forEach(year => {
 
         // legend for each year
         const legendSpacing = 80;
-        const legendY2 = barHeight - 350;
-        const legendStartX = barHeight - 300;
+        const legendY2 = barHeight + 120;
+        const legendStartX = barHeight - 560;
 
         causeYears.forEach((year, i) => {
             // legend blcok
