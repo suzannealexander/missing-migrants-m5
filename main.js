@@ -35,14 +35,14 @@ function nextImage(){
 
 // First chart (Missing by Year)
 const margin = { top: 20, right: 10, bottom: 50, left: 60 };
-const w = 650;
-const h = 370;
+const w = 450;
+const h = 250;
 let totals = [];
 
 // Second chart (Cause of Death)
 const barMargin = { top: 20, right: 15, bottom: 50, left: 60 };
-const barWidth = 310;
-const barHeight = 300;
+const barWidth = 360;
+const barHeight = 330;
 
 // variables for the animated time chart
 let pathDead, pathMissing, lineForDead, lineForMissing;
