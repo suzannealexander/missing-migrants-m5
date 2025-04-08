@@ -468,7 +468,7 @@ ul {
   line-height: 1.6;
 }
 
-.left-column {
+/* .left-column {
   grid-area: left;
   display: flex;
   flex-direction: column;
@@ -479,7 +479,19 @@ ul {
 
 .right-column {
   grid-area: right;
+} */
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1.4fr 1.6fr;
+  grid-template-areas: 
+    "left right";
+  padding: 20px;
+  overflow-x: hidden;
+  gap: 20px;
 }
+
+
 
 .left-column, .right-column {
   border: 2px dashed red;
