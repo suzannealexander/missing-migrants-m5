@@ -115,7 +115,7 @@ header {
   grid-row: 2/3;
   grid-column: 1/2;
   margin-left: -350px;
-  margin-top: -280px;
+  margin-top: -260px;
 }
 
 .chart-container svg {
