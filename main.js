@@ -35,14 +35,14 @@ function nextImage(){
 
 // First chart (Missing by Year)
 const margin = { top: 20, right: 10, bottom: 50, left: 60 };
-const w = 450;
-const h = 250;
+const w = 650;
+const h = 450;
 let totals = [];
 
 // Second chart (Cause of Death)
-const barMargin = { top: 20, right: 15, bottom: 50, left: 60 };
-const barWidth = 360;
-const barHeight = 330;
+const barMargin = { top: 20, right: 5, bottom: 120, left: 60 };
+const barWidth = 750;
+const barHeight = 550;
 
 // variables for the animated time chart
 let pathDead, pathMissing, lineForDead, lineForMissing;
@@ -136,15 +136,17 @@ let keyframeIndex = 0;
 
 // svg
 let svg = d3.select("#svg")
-    .attr("width", w + margin.left + margin.right)
-    .attr("height", h + margin.top + margin.bottom)
+    .attr("viewBox", "0 0 " + (w + margin.left + margin.right) + " " + (h + margin.top + margin.bottom))
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .classed("responsive-svg", true)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // second svg
 let barSvg = d3.select("#causeOfDeathSvg")
-    .attr("width", barWidth + barMargin.left + barMargin.right)
-    .attr("height", barHeight + barMargin.top + barMargin.bottom)
+    .attr("viewBox", "0 0 " + (barWidth + barMargin.left + barMargin.right) + " " + (barHeight + barMargin.top + barMargin.bottom))
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .classed("responsive-svg", true)
     .append("g")
     .attr("transform", "translate(" + barMargin.left + "," + barMargin.top + ")");
 
@@ -243,7 +245,7 @@ d3.csv('us_data.csv')
             .attr("transform", "rotate(-90)")
             .text("Frequency");
         
-        let legendY = h+50
+        let legendY = h-100
         // adding a legend
         svg.append("rect")
             .attr("x",  20)
@@ -441,12 +443,14 @@ causeYears.forEach(year => {
 
         // legend for each year
         const legendSpacing = 80;
-        const legendY2 = barHeight + 90;
+        const legendY2 = barHeight - 350;
+        const legendStartX = barHeight - 300;
 
         causeYears.forEach((year, i) => {
             // legend blcok
             barSvg.append("rect")
                 .attr("x", i * legendSpacing)
+                .attr("x", legendStartX + (i * legendSpacing))
                 .attr("y", legendY2)
                 .attr("width", 15)
                 .attr("height", 15)
@@ -455,6 +459,7 @@ causeYears.forEach(year => {
             // legend text
             barSvg.append("text")
                 .attr("x", i * legendSpacing + 20)
+                .attr("x", legendStartX + (i * legendSpacing) + 20)
                 .attr("y", legendY2 + 12)
                 .attr("font-size", "12px")
                 .text(year);
@@ -476,8 +481,8 @@ causeYears.forEach(year => {
 
         // label
         barSvg.append("text")
-            .attr("x", barWidth * 3/4 +130)
-            .attr("y", barHeight + 20)
+            .attr("x", barWidth * 1/2)
+            .attr("y", barHeight + 100)
             .attr("text-anchor", "middle")
             .text("Cause of Death");
 
@@ -689,3 +694,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     drawKeyframe(keyframeIndex);
 });
+d3.select("svg")
+  .attr("preserveAspectRatio", "xMidYMid meet")
+  .attr("viewBox", `0 0 ${width} ${height}`)
