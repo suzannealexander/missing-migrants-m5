@@ -134,9 +134,8 @@ header {
   
 } */
 #box1 {
-  grid-column: 1;
-  grid-row: 1;
-  margin: 0;
+  width:700px;
+  height: 600px;
   max-width: 100%;
 }
 
@@ -148,11 +147,10 @@ header {
 }
 
 #box3 {
-  grid-column: 1 / span 2;
-  grid-row: 2;
-  margin: 0;
+  width:790px;
+  height: 800px;
   max-width: 100%;
-  padding-bottom: 50px;
+
 }
 .chart-container svg {
   background-color: white;
@@ -350,9 +348,10 @@ ul {
 #articlesSvg {
   display: block;
   margin: auto;
-  /* width:100%; */
-
+  width: 100%;
+  height: auto;
 }
+
 
 .chart-container #articleSVG {
   background-color:white;
@@ -472,4 +471,8 @@ ul {
   padding: 20px;
   overflow-x: hidden;
   gap: 20px;
+}
+
+.chart-container {
+  display: none;
 }
