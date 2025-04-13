@@ -160,8 +160,8 @@ let barSvg = d3.select("#causeOfDeathSvg")
 
 
 
-let allData;        // summarized data
-let rawData;        // original per-article data (for dot plots)
+let allData;// summarized data
+let rawData;// original per-article data (for the frequency dot plot)
 
 async function loadData() {
     const data = await d3.csv('us_data.csv');
@@ -172,7 +172,7 @@ async function loadData() {
         Number_Dead: d['Number Dead'] ? +d['Number Dead'] : 0,
         Minimum_Estimated_Number_of_Missing: d['Minimum Estimated Number of Missing'] ? +d['Minimum Estimated Number of Missing'] : 0,
         Cause_of_Death: d['Cause of Death'],
-        URL: d['URL']  // don't forget this!
+        URL: d['URL']
     }));
 
     // Summarized data for line graph
