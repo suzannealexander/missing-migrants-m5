@@ -52,7 +52,10 @@ let keyframes = [
     {
         activeVerse: 1,
         activeLines: [1],
-        svgUpdate: null
+        svgUpdate: () => {
+            // drawMissingDeadLineGraph();
+            // showChart("box1");
+        }
     },
     {
         activeVerse: 1,
@@ -71,14 +74,12 @@ let keyframes = [
         activeVerse: 1,
         activeLines: [4],
         svgUpdate: null
+        
     },
     {
         activeVerse: 2,
         activeLines: [1],
-        svgUpdate: () => {
-            animateChart();
-            showChart("box1");
-        }
+        svgUpdate: null
     },
     {
         activeVerse: 2,
@@ -106,12 +107,9 @@ let keyframes = [
     {
         activeVerse: 2,
         activeLines: [6],
-        svgUpdate: () => {
-            drawArticlesOverTime();
-            showChart("box3");
-        }
+        svgUpdate: null
     },
-    {
+{
     activeVerse: 3,
     activeLines: [1],
     svgUpdate: () => {
@@ -125,43 +123,36 @@ let keyframes = [
     activeLines: [1],
     svgUpdate: () => {
       highlightDeathCause('disease');
-      highlightDeathCause('accident');
       showChart("box2");
       hideAllBars();
       showCategoryBars('Disease/Illness');
-      showCategoryBars('Vehicle Accident');
-
     }
   },
-//   {
-//     activeVerse: 3,
-//     activeLines: [1],
-//     svgUpdate: () => {
-//       highlightDeathCause('accident');
-//       showChart("box2");
-//       showCategoryBars('Vehicle Accident');
-//     }
-//   },
-//   {
-//     activeVerse: 3,
-//     activeLines: [1],
-//     svgUpdate: () => {
-//       highlightDeathCause('violence');
-//       showChart("box2");
-//       showCategoryBars('Violence');
-//     }
-//   },
+  {
+    activeVerse: 3,
+    activeLines: [1],
+    svgUpdate: () => {
+      highlightDeathCause('accident');
+      showChart("box2");
+      showCategoryBars('Vehicle Accident');
+    }
+  },
   {
     activeVerse: 3,
     activeLines: [1],
     svgUpdate: () => {
       highlightDeathCause('violence');
-
+      showChart("box2");
+      showCategoryBars('Violence');
+    }
+  },
+  {
+    activeVerse: 3,
+    activeLines: [1],
+    svgUpdate: () => {
       highlightDeathCause('dehydration');
       showChart("box2");
       showCategoryBars('Exposure/Dehydration');
-      showCategoryBars('Violence');
-
     }
   },
   {
@@ -838,7 +829,7 @@ function backwardClicked() {
     }
 }
 
-// event listener
+// event listner
 document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById("backward-button").addEventListener("click", backwardClicked);
@@ -847,6 +838,9 @@ document.addEventListener("DOMContentLoaded", function() {
     drawKeyframe(keyframeIndex);
 });
 
+// d3.select("svg")
+//   .attr("preserveAspectRatio", "xMidYMid meet")
+//   .attr("viewBox", `0 0 ${width} ${height}`)
 
 
 async function initalize(){
@@ -857,16 +851,14 @@ async function initalize(){
 
 initalize();
 
-
-
-// reset highlights for cause of death words
+// reset hilights for cause of death words
 function resetDeathCauseHighlights() {
     document.querySelectorAll('.death-cause').forEach(el => {
       el.classList.remove('highlighted-death-cause');
     });
   }
   
-  // highlight via id
+  // hilight via id
   function highlightDeathCause(id) {
     resetDeathCauseHighlights();
     const element = document.getElementById(id);
@@ -901,7 +893,7 @@ function hideAllBars() {
     hideAllBars();
   }
   
-  // load page -> reset bar
+  // loead page -> reset bar
   document.addEventListener('DOMContentLoaded', function() {
     // delay
     setTimeout(initializeBarVisibility, 500);
