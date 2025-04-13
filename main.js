@@ -52,10 +52,7 @@ let keyframes = [
     {
         activeVerse: 1,
         activeLines: [1],
-        svgUpdate: () => {
-            // drawMissingDeadLineGraph();
-            // showChart("box1");
-        }
+        svgUpdate: null
     },
     {
         activeVerse: 1,
@@ -78,7 +75,10 @@ let keyframes = [
     {
         activeVerse: 2,
         activeLines: [1],
-        svgUpdate: null
+        svgUpdate: () => {
+            animateChart();
+            showChart("box1");
+        }
     },
     {
         activeVerse: 2,
@@ -106,7 +106,10 @@ let keyframes = [
     {
         activeVerse: 2,
         activeLines: [6],
-        svgUpdate: null
+        svgUpdate: () => {
+            drawArticlesOverTime();
+            showChart("box3");
+        }
     },
     {
     activeVerse: 3,
@@ -122,6 +125,7 @@ let keyframes = [
     activeLines: [1],
     svgUpdate: () => {
       highlightDeathCause('disease');
+      highlightDeathCause('accident');
       showChart("box2");
       hideAllBars();
       showCategoryBars('Disease/Illness');
