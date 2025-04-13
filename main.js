@@ -109,10 +109,70 @@ let keyframes = [
         svgUpdate: null
     },
     {
-        activeVerse: 3,
-        activeLines: [1],
-        svgUpdate: null
-    },
+    activeVerse: 3,
+    activeLines: [1],
+    svgUpdate: () => {
+      showChart("box2");
+      resetDeathCauseHighlights();
+      hideAllBars();
+    }
+  },
+  {
+    activeVerse: 3,
+    activeLines: [1],
+    svgUpdate: () => {
+      highlightDeathCause('disease');
+      showChart("box2");
+      hideAllBars();
+      showCategoryBars('Disease/Illness');
+    }
+  },
+  {
+    activeVerse: 3,
+    activeLines: [1],
+    svgUpdate: () => {
+      highlightDeathCause('accident');
+      showChart("box2");
+      showCategoryBars('Vehicle Accident');
+    }
+  },
+  {
+    activeVerse: 3,
+    activeLines: [1],
+    svgUpdate: () => {
+      highlightDeathCause('violence');
+      showChart("box2");
+      showCategoryBars('Violence');
+    }
+  },
+  {
+    activeVerse: 3,
+    activeLines: [1],
+    svgUpdate: () => {
+      highlightDeathCause('dehydration');
+      showChart("box2");
+      showCategoryBars('Exposure/Dehydration');
+    }
+  },
+  {
+    activeVerse: 3,
+    activeLines: [1],
+    svgUpdate: () => {
+      highlightDeathCause('drowning');
+      showChart("box2");
+      showCategoryBars('Drowning');
+    }
+  },
+
+  {
+    activeVerse: 3,
+    activeLines: [1],
+    svgUpdate: () => {
+      highlightDeathCause('unknown');
+      showChart("box2");
+      showMultipleCategories(['Unknown', 'Other']);
+    }
+  },
     {
         activeVerse: 3,
         activeLines: [2],
@@ -583,7 +643,7 @@ causeYears.forEach(year => {
 
         // legend for each year
         const legendSpacing = 80;
-        const legendY2 = barHeight + 120;
+        const legendY2 = barHeight + 140;
         const legendStartX = barHeight - 560;
 
         causeYears.forEach((year, i) => {
@@ -622,8 +682,8 @@ causeYears.forEach(year => {
 
         // label
         barSvg.append("text")
-            .attr("x", barWidth * 1/2)
-            .attr("y", barHeight + 100)
+            .attr("x", barWidth * 1/2+20)
+            .attr("y", barHeight + 120)
             .attr("text-anchor", "middle")
             .text("Cause of Death");
 
@@ -791,3 +851,51 @@ async function initalize(){
 initalize();
 
 
+
+// reset hilights for cause of death words
+function resetDeathCauseHighlights() {
+    document.querySelectorAll('.death-cause').forEach(el => {
+      el.classList.remove('highlighted-death-cause');
+    });
+  }
+  
+  // hilight via id
+  function highlightDeathCause(id) {
+    resetDeathCauseHighlights();
+    const element = document.getElementById(id);
+    if (element) {
+      element.classList.add('highlighted-death-cause');
+    }
+  }
+
+  // hide bars
+function hideAllBars() {
+    document.querySelectorAll('.year-bar').forEach(bar => {
+      bar.classList.remove('visible');
+    });
+  }
+  
+  // show specific bar
+  function showCategoryBars(category) {
+    document.querySelectorAll(`.year-bar[data-category="${category}"]`).forEach(bar => {
+      bar.classList.add('visible');
+    });
+  }
+  
+  // show multiple bars -> for unknown and other words bar
+  function showMultipleCategories(categories) {
+    categories.forEach(category => {
+      showCategoryBars(category);
+    });
+  }
+  
+  // reset
+  function initializeBarVisibility() {
+    hideAllBars();
+  }
+  
+  // loead page -> reset bar
+  document.addEventListener('DOMContentLoaded', function() {
+    // delay
+    setTimeout(initializeBarVisibility, 500);
+  });
