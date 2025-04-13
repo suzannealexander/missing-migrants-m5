@@ -124,56 +124,20 @@ let keyframes = [
     activeVerse: 3,
     activeLines: [1],
     svgUpdate: () => {
-      highlightDeathCause('disease');
-      highlightDeathCause('accident');
-      showChart("box2");
-      hideAllBars();
-      showCategoryBars('Disease/Illness');
-      showCategoryBars('Vehicle Accident');
-
-    }
-  },
-//   {
-//     activeVerse: 3,
-//     activeLines: [1],
-//     svgUpdate: () => {
-//       highlightDeathCause('accident');
-//       showChart("box2");
-//       showCategoryBars('Vehicle Accident');
-//     }
-//   },
-//   {
-//     activeVerse: 3,
-//     activeLines: [1],
-//     svgUpdate: () => {
-//       highlightDeathCause('violence');
-//       showChart("box2");
-//       showCategoryBars('Violence');
-//     }
-//   },
-  {
-    activeVerse: 3,
-    activeLines: [1],
-    svgUpdate: () => {
-      highlightDeathCause('violence');
-
-      highlightDeathCause('dehydration');
-      showChart("box2");
-      showCategoryBars('Exposure/Dehydration');
-      showCategoryBars('Violence');
-
+        highlightDeathCause('disaster');
+        showChart("box2");
+        showMultipleCategories(['Violence', 'Vehicle Accident','Disease/Illness']);
     }
   },
   {
     activeVerse: 3,
     activeLines: [1],
     svgUpdate: () => {
-      highlightDeathCause('drowning');
+      highlightDeathCause('chaos');
       showChart("box2");
-      showCategoryBars('Drowning');
+      showMultipleCategories(['Drowning', 'Exposure/Dehydration']);
     }
   },
-
   {
     activeVerse: 3,
     activeLines: [1],
@@ -750,7 +714,7 @@ function drawKeyframe(kfi) {
     const kf = keyframes[kfi];
     
     resetActiveLines();
-    
+    resetDeathCauseHighlights(); 
     // active verse update
     updateActiveVerse(kf.activeVerse);
     
