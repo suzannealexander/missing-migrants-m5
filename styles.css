@@ -476,3 +476,37 @@ ul {
 .chart-container {
   display: none;
 }
+
+/* For causes of death bar chart */
+.death-cause {
+  transition: all 0.3s ease;
+}
+
+.highlighted-death-cause {
+  color: #FF5733;
+  font-weight: bold;
+  background-color: rgba(255, 87, 51, 0.1);
+  border-radius: 3px;
+  padding: 0 3px;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* For bar chart animation */
+.year-bar {
+  /* start */
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.8s ease;
+}
+
+.year-bar.visible {
+  /* final look*/
+  opacity: 1;
+  transform: scale(1);
+}
