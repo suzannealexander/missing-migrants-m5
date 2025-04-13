@@ -129,33 +129,39 @@ let keyframes = [
       showChart("box2");
       hideAllBars();
       showCategoryBars('Disease/Illness');
-    }
-  },
-  {
-    activeVerse: 3,
-    activeLines: [1],
-    svgUpdate: () => {
-      highlightDeathCause('accident');
-      showChart("box2");
       showCategoryBars('Vehicle Accident');
+
     }
   },
+//   {
+//     activeVerse: 3,
+//     activeLines: [1],
+//     svgUpdate: () => {
+//       highlightDeathCause('accident');
+//       showChart("box2");
+//       showCategoryBars('Vehicle Accident');
+//     }
+//   },
+//   {
+//     activeVerse: 3,
+//     activeLines: [1],
+//     svgUpdate: () => {
+//       highlightDeathCause('violence');
+//       showChart("box2");
+//       showCategoryBars('Violence');
+//     }
+//   },
   {
     activeVerse: 3,
     activeLines: [1],
     svgUpdate: () => {
       highlightDeathCause('violence');
-      showChart("box2");
-      showCategoryBars('Violence');
-    }
-  },
-  {
-    activeVerse: 3,
-    activeLines: [1],
-    svgUpdate: () => {
+
       highlightDeathCause('dehydration');
       showChart("box2");
       showCategoryBars('Exposure/Dehydration');
+      showCategoryBars('Violence');
+
     }
   },
   {
