@@ -838,7 +838,7 @@ function backwardClicked() {
     }
 }
 
-// event listner
+// event listener
 document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById("backward-button").addEventListener("click", backwardClicked);
@@ -847,9 +847,6 @@ document.addEventListener("DOMContentLoaded", function() {
     drawKeyframe(keyframeIndex);
 });
 
-// d3.select("svg")
-//   .attr("preserveAspectRatio", "xMidYMid meet")
-//   .attr("viewBox", `0 0 ${width} ${height}`)
 
 
 async function initalize(){
@@ -862,14 +859,14 @@ initalize();
 
 
 
-// reset hilights for cause of death words
+// reset highlights for cause of death words
 function resetDeathCauseHighlights() {
     document.querySelectorAll('.death-cause').forEach(el => {
       el.classList.remove('highlighted-death-cause');
     });
   }
   
-  // hilight via id
+  // highlight via id
   function highlightDeathCause(id) {
     resetDeathCauseHighlights();
     const element = document.getElementById(id);
@@ -904,7 +901,7 @@ function hideAllBars() {
     hideAllBars();
   }
   
-  // loead page -> reset bar
+  // load page -> reset bar
   document.addEventListener('DOMContentLoaded', function() {
     // delay
     setTimeout(initializeBarVisibility, 500);
