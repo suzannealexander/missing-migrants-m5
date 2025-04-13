@@ -16,7 +16,14 @@ musicIcon.addEventListener("click", function() {
 
 // we need to track the images we will use for this vis display 
 
-const images = ["images/horizon.png", "images/cod1.png"];
+const images = [
+    "images/bay.png",
+     "images/ethiopian.png", 
+     "images/momandson.png",  
+     "images/sea.png", 
+     "images/toddler.png", 
+     "images/sunk.png"
+    ];
 let currentIndex = 0;
 
 function updateImage(){
@@ -35,8 +42,9 @@ function nextImage(){
 
 // First chart (Missing by Year)
 const margin = { top: 50, right: 20, bottom: 130, left: 60 };
-const w = 700;
-const h = 600;
+const w = 650;
+const h = 450;
+let totals = [];
 
 // Second chart (Cause of Death)
 const barMargin = { top: 20, right: 5, bottom: 170, left: 60 };
@@ -46,24 +54,23 @@ const barHeight = 550;
 // variables for the animated time chart
 let pathDead, pathMissing, lineForDead, lineForMissing;
 
+// Four chart (Missing by Gender) 
+const missingMargin = { top: 20, right: 5, bottom: 170, left: 60 };
+const missingWidth = 750;
+const missingHeight = 550;
+
 
 // Keyframe
 let keyframes = [
     {
         activeVerse: 1,
         activeLines: [1],
-        svgUpdate: () => {
-            // drawMissingDeadLineGraph();
-            // showChart("box1");
-        }
+        svgUpdate: null
     },
     {
         activeVerse: 1,
         activeLines: [2],
-        svgUpdate: () => {
-            animateChart();
-            showChart("box1");
-        }
+        svgUpdate: animateChart
     },
     {
         activeVerse: 1,
@@ -88,10 +95,7 @@ let keyframes = [
     {
         activeVerse: 2,
         activeLines: [3],
-        svgUpdate: () => {
-            drawArticlesOverTime();
-            showChart("box3");
-        }
+        svgUpdate: null
     },
     {
         activeVerse: 2,
@@ -116,7 +120,7 @@ let keyframes = [
     {
         activeVerse: 3,
         activeLines: [2],
-        // svgUpdate: updateVehicleAccidentColor
+        svgUpdate: updateVehicleAccidentColor
     },
     {
         activeVerse: 3,
@@ -158,228 +162,13 @@ let barSvg = d3.select("#causeOfDeathSvg")
     .append("g")
     .attr("transform", "translate(" + barMargin.left + "," + barMargin.top + ")");
 
-
-
-let allData;        // summarized data
-let rawData;        // original per-article data (for dot plots)
-
-async function loadData() {
-    const data = await d3.csv('us_data.csv');
-
-    // Store raw data separately
-    rawData = data.map(d => ({
-        Reported_Year: d['Reported Year'],
-        Number_Dead: d['Number Dead'] ? +d['Number Dead'] : 0,
-        Minimum_Estimated_Number_of_Missing: d['Minimum Estimated Number of Missing'] ? +d['Minimum Estimated Number of Missing'] : 0,
-        Cause_of_Death: d['Cause of Death'],
-        URL: d['URL']  // don't forget this!
-    }));
-
-    // Summarized data for line graph
-    const totalByYear = d3.group(rawData, d => d.Reported_Year);
-
-    allData = Array.from(totalByYear, ([year, records]) => {
-        const totalDead = d3.sum(records, d => d.Number_Dead);
-        const totalMissing = d3.sum(records, d => d.Minimum_Estimated_Number_of_Missing);
-        return {
-            year: +year,
-            totalDead,
-            totalMissing
-        };
-    });
-
-    allData.sort((a, b) => a.year - b.year);
-}
-
-
-function drawMissingDeadLineGraph(){
-    totals = allData;
-
-    // x axis based on years
-    const xScale = d3.scaleLinear()
-    .domain(d3.extent(totals, d => d.year))
-    .range([0, w]);
-   
-    // y axis based on frequency of missing/dead
-    const yScale = d3.scaleLinear()
-        .domain([0, d3.max(totals, d => Math.max(d.totalDead, d.totalMissing))])
-        .nice()    
-        .range([h, 0]);
-
-    // adding the axes
-    svg.append("g")
-        .attr("class", "x-axis")
-        .attr("transform", `translate(0,${h})`)
-        .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
-
-    svg.append("g")
-        .call(d3.axisLeft(yScale));
-    
-    // creating lines for dead/missing
-    lineForDead = d3.line()
-        .x(d => xScale(d.year))
-        .y(d => yScale(d.totalDead))
-        .curve(d3.curveMonotoneX);
-
-    lineForMissing = d3.line()
-        .x(d => xScale(d.year))
-        .y(d => yScale(d.totalMissing))
-        .curve(d3.curveMonotoneX);
-
-
-    pathDead = svg.append("path")
-        .datum(totals)
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-        .attr("stroke-width", 2)
-        .attr("d", lineForDead);
-
-    pathMissing = svg.append("path")
-        .datum(totals)
-        .attr("fill", "none")
-        .attr("stroke", "red")
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-        .attr("stroke-width", 2)
-        .attr("d", lineForMissing);
-
-        d3.select("#play-button")
-            .style("position", "absolute")
-            .style("top", "-4px")
-            .style("right", "48px")
-            .on("click", animateChart);
-
-
-    // adding axis labels
-    svg.append("text")
-        .attr("x", w / 2)
-        .attr("y", h + 40)
-        .attr("text-anchor", "middle")
-        .text("Year");
-
-    svg.append("text")
-        .attr("x", -h / 2)
-        .attr("y", -40)
-        .attr("text-anchor", "middle")
-        .attr("transform", "rotate(-90)")
-        .text("Frequency");
-    
-    let legendY = h+50
-    // adding a legend
-    svg.append("rect")
-        .attr("x",  20)
-        .attr("y", legendY)
-        .attr("width", 20)
-        .attr("height", 20)
-        .attr("fill", "steelblue");
-        
-    svg.append("text")
-        .attr("x", 50)
-        .attr("y", legendY + 15)
-        .text("Total Dead");
-
-    svg.append("rect")
-        .attr("x", 20)
-        .attr("y", legendY + 30)
-        .attr("width", 20)
-        .attr("height", 20)
-        .attr("fill", "red");
-    svg.append("text")
-        .attr("x", 50)
-        .attr("y", legendY + 45)
-        .text("Total Missing");
-
-}
-
-
-function drawArticlesOverTime(){
-    const dots = [];
-    console.log(rawData)
-    const grouped = d3.group(rawData, d => d.Reported_Year);
-    console.log("Grouped data:", grouped);
-
-    grouped.forEach((entries, year) => {
-        entries.forEach((d, i) => {
-            const urls = d.URL?.split(",").map(u => u.trim()) ?? [];
-            dots.push({
-                year: year,
-                yIndex: i,
-                urls: urls,
-                original: d
-            });
-        });
-    });
-
-    const years = Array.from(grouped.keys()).sort();
-    const maxStack = d3.max(Array.from(grouped.values(), v => v.length));
-    const freqHeight = 700; 
-
-
-    const freqMargin = { top: 20, right: 15, bottom: 50, left: 60 };
-    const freqWidth = 670;
-
-
-    let freqSvg = d3.select("#articlesSvg")
-    .attr("width", freqWidth + freqMargin.left + freqMargin.right)
-    .attr("height", freqHeight + freqMargin.top + freqMargin.bottom)
+// four svg
+let missingSvg = d3.select("#missingSvg")
+    .attr("viewBox", "0 0 " + (barWidth + barMargin.left + barMargin.right) + " " + (barHeight + barMargin.top + barMargin.bottom))
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .classed("responsive-svg", true)
     .append("g")
-    .attr("transform", "translate(" + freqMargin.left + "," + freqMargin.top + ")");
-
-
-
-    const xScaleFreq = d3.scaleBand()
-        .domain(years)
-        .range([0, freqWidth])
-        .padding(0.3);
-    
-    const yScaleFreq = d3.scaleLinear()
-        .domain([0, maxStack])
-        .range([freqHeight, 0]);
-        
-
-    freqSvg.append("g")
-        .attr("transform", `translate(0,${freqHeight})`)
-        .call(d3.axisBottom(xScaleFreq));
-
-    freqSvg.append("g")
-        .call(d3.axisLeft(yScaleFreq).ticks(5));
-
-    // adding axis labels
-    freqSvg.append("text")
-        .attr("x", w / 2)
-        .attr("y", h + 140)
-        .attr("text-anchor", "middle")
-        .text("Year");
-
-    freqSvg.append("text")
-        .attr("x", -h / 2)
-        .attr("y", -40)
-        .attr("text-anchor", "middle")
-        .attr("transform", "rotate(-90)")
-        .text("Frequency");
-
-    freqSvg.selectAll("circle")
-        .data(dots)
-        .enter()
-        .append("circle")
-        .attr("cx", d => xScaleFreq(d.year) + xScaleFreq.bandwidth() / 2)
-        .attr("cy", d => yScaleFreq(d.yIndex))
-        .attr("r", 8)
-        .attr("fill", "steelblue")
-        .style("cursor", "pointer")
-        .on("mouseover", function (event, d) {
-            d3.select(this).attr("fill", "orange");
-        })
-        .on("mouseout", function (event, d) {
-            d3.select(this).attr("fill", "steelblue");
-        })
-        .on("click", function (event, d) {
-            d.urls.forEach(url => window.open(url, "_blank"));
-        });
-}
-
+    .attr("transform", "translate(" + barMargin.left + "," + barMargin.top + ")");
 
 // load data and make graph
 d3.csv('us_data.csv')
@@ -409,6 +198,185 @@ d3.csv('us_data.csv')
 
         // sorting years in chronological order
         totals.sort((a,b) => +a.year - +b.year);
+
+    // Calculations for missing gender data ----------------------------------------------------------------------------------
+
+        const missTotalMales = d3.sum(data, d => +d["Number of Males"]);
+        const missTotalFemales = d3.sum(data, d => +d["Number of Females"]);
+
+        const missGenderData = [
+            { gender: "Male", total: missTotalMales },
+            { gender: "Female", total: missTotalFemales }
+        ];
+
+        // Set dimensions for the missing gender bar chart
+        const missBarWidth = 800;
+        const missBarHeight = missBarWidth *0.6;
+        const missBarMargin = { top: 20, right: 20, bottom: 40, left: 40 };
+
+        const missSvg = d3.select("#missingSvg")
+            .attr("width", missBarWidth)
+            .attr("height", missBarHeight);
+
+        const missX = d3.scaleBand()
+            .domain(missGenderData.map(d => d.gender))
+            .range([missBarMargin.left, missBarWidth - missBarMargin.right])
+            .padding(0.4);
+
+        const missY = d3.scaleLinear()
+            .domain([0, d3.max(missGenderData, d => d.total)])
+            .nice()
+            .range([missBarHeight - missBarMargin.bottom, missBarMargin.top]);
+
+
+        // Draw missing people bars
+        missSvg.selectAll("rect")
+            .data(missGenderData)
+            .enter()
+            .append("rect")
+            .attr("x", d => missX(d.gender))
+            .attr("y", d => missY(d.total))
+            .attr("width", missX.bandwidth())
+            .attr("height", d => missY(0) - missY(d.total))
+            .attr("fill", d => d.gender === "Female" ? "purple" : "steelblue");
+
+        // Add x-axis for missing chart
+        missSvg.append("g")
+            .attr("transform", `translate(0,${missBarHeight - missBarMargin.bottom})`)
+            .call(d3.axisBottom(missX))
+            .selectAll("text")
+            .style("font-size", "24px");
+
+        // Add y-axis for missing chart
+        missSvg.append("g")
+            .attr("transform", `translate(${missBarMargin.left},0)`)
+            .style("font-size", "24px")
+            .call(d3.axisLeft(missY));
+
+        // Axis labels for missing chart
+        missSvg.append("text")
+        .attr("x", missBarWidth / 2)
+        .attr("y", missBarHeight +15)
+        .attr("text-anchor", "middle")
+        .text("Gender")
+        .style("font-size", "25px");
+
+        missSvg.append("text")
+        .attr("x", -missBarHeight / 2)
+        .attr("y", -60)
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "middle")
+        .style("font-size", "25px")
+        .text("Total Number Missing");
+
+        // Add caption to chart
+        missSvg.append("text")
+        .attr("x", missBarWidth / 2)   // center horizontally
+        .attr("y", missBarHeight + 80) // a bit below the chart
+        .attr("text-anchor", "middle") // center the text
+        .style("font-size", "25px")    // set font size
+        .style("fill", "black")        // set text color
+        .text("Source: National Missing Persons Database, 2024");
+
+
+
+// --------------------------------------------------------------------------------------------------------------------------
+
+        // x axis based on years
+        const xScale = d3.scaleLinear()
+        .domain(d3.extent(totals, d => d.year))
+        .range([0, w]);
+       
+        // y axis based on frequency of missing/dead
+        const yScale = d3.scaleLinear()
+            .domain([0, d3.max(totals, d => Math.max(d.totalDead, d.totalMissing))])
+            .nice()    
+            .range([h, 0]);
+
+        // adding the axes
+        svg.append("g")
+            .attr("class", "x-axis")
+            .attr("transform", `translate(0,${h})`)
+            .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
+
+        svg.append("g")
+            .call(d3.axisLeft(yScale));
+        
+        // creating lines for dead/missing
+        lineForDead = d3.line()
+            .x(d => xScale(d.year))
+            .y(d => yScale(d.totalDead))
+            .curve(d3.curveMonotoneX);
+
+        lineForMissing = d3.line()
+            .x(d => xScale(d.year))
+            .y(d => yScale(d.totalMissing))
+            .curve(d3.curveMonotoneX);
+
+
+        pathDead = svg.append("path")
+            .datum(totals)
+            .attr("fill", "none")
+            .attr("stroke", "steelblue")
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 2)
+            .attr("d", lineForDead);
+
+        pathMissing = svg.append("path")
+            .datum(totals)
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 2)
+            .attr("d", lineForMissing);
+    
+            d3.select("#play-button")
+                .style("position", "absolute")
+                .style("top", "-4px")
+                .style("right", "48px")
+                .on("click", animateChart);
+
+
+        // adding axis labels
+        svg.append("text")
+            .attr("x", w / 2)
+            .attr("y", h + 40)
+            .attr("text-anchor", "middle")
+            .text("Year");
+
+        svg.append("text")
+            .attr("x", -h / 2)
+            .attr("y", -40)
+            .attr("text-anchor", "middle")
+            .attr("transform", "rotate(-90)")
+            .text("Frequency");
+        
+        let legendY = h+50
+        // adding a legend
+        svg.append("rect")
+            .attr("x",  20)
+            .attr("y", legendY)
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("fill", "steelblue");
+            
+        svg.append("text")
+            .attr("x", 50)
+            .attr("y", legendY + 15)
+            .text("Total Dead");
+
+        svg.append("rect")
+            .attr("x", 20)
+            .attr("y", legendY + 30)
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("fill", "red");
+        svg.append("text")
+            .attr("x", 50)
+            .attr("y", legendY + 45)
+            .text("Total Missing");
 
         // preprocessing cause of death data
         // cause of death categories
@@ -633,20 +601,79 @@ causeYears.forEach(year => {
             .attr("text-anchor", "middle")
             .attr("transform", "rotate(-90)")
             .text("Frequency");
-    })
 
-function showChart(boxIdToShow) {
-    const boxes = ["box1", "box2", "box3"];
-    boxes.forEach(id => {
-        const box = document.getElementById(id);
-        if (id === boxIdToShow) {
-            box.style.display = "block";
-        } else {
-            box.style.display = "none";
-        }
-    });
-}
+        
+        
+        const dots = [];
+
+
+        const grouped = d3.group(data, d => d["Reported Year"]);
+
+        grouped.forEach((entries, year) => {
+            entries.forEach((d, i) => {
+                const urls = d.URL?.split(",").map(u => u.trim()) ?? [];
+                dots.push({
+                    year: year,
+                    yIndex: i,
+                    urls: urls,
+                    original: d
+                });
+            });
+        });
+
+        const years = Array.from(grouped.keys()).sort();
+        const maxStack = d3.max(Array.from(grouped.values(), v => v.length));
+        const freqHeight = 400; 
+
+
+        const freqMargin = { top: 20, right: 15, bottom: 50, left: 60 };
+        const freqWidth = 520;
+
+
+        let freqSvg = d3.select("#articlesSvg")
+        .attr("viewBox", `0 0 ${freqWidth + freqMargin.left + freqMargin.right} ${freqHeight + freqMargin.top + freqMargin.bottom}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .append("g")
+        .attr("transform", "translate(" + freqMargin.left + "," + freqMargin.top + ")");
+
+
+
+        const xScaleFreq = d3.scaleBand()
+            .domain(years)
+            .range([0, freqWidth])
+            .padding(0.3);
+        
+        const yScaleFreq = d3.scaleLinear()
+            .domain([0, maxStack])
+            .range([freqHeight, 0]);
+            
+
+        freqSvg.append("g")
+            .attr("transform", `translate(0,${freqHeight})`)
+            .call(d3.axisBottom(xScaleFreq));
     
+        freqSvg.append("g")
+            .call(d3.axisLeft(yScaleFreq).ticks(5));
+
+        freqSvg.selectAll("circle")
+            .data(dots)
+            .enter()
+            .append("circle")
+            .attr("cx", d => xScaleFreq(d.year) + xScaleFreq.bandwidth() / 2)
+            .attr("cy", d => yScaleFreq(d.yIndex))
+            .attr("r", 8)
+            .attr("fill", "steelblue")
+            .style("cursor", "pointer")
+            .on("mouseover", function (event, d) {
+                d3.select(this).attr("fill", "orange");
+            })
+            .on("mouseout", function (event, d) {
+                d3.select(this).attr("fill", "steelblue");
+            })
+            .on("click", function (event, d) {
+                d.urls.forEach(url => window.open(url, "_blank"));
+            });
+    })
 
 function animateChart() {
     let index = 0;
@@ -776,18 +803,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     drawKeyframe(keyframeIndex);
 });
-
-// d3.select("svg")
-//   .attr("preserveAspectRatio", "xMidYMid meet")
-//   .attr("viewBox", `0 0 ${width} ${height}`)
-
-
-async function initalize(){
-    await loadData();
-    drawMissingDeadLineGraph();
-    drawArticlesOverTime();
-}
-
-initalize();
-
-
+d3.select("svg")
+  .attr("preserveAspectRatio", "xMidYMid meet")
+  .attr("viewBox", `0 0 ${width} ${height}`)

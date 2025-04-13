@@ -8,6 +8,8 @@ body{
   color: black;
   overflow-x: hidden;
   max-width: 100vw;
+  background-color: grey;
+  
   
 }
 
@@ -32,6 +34,52 @@ h1{
   color: black;
 }
 
+/* CAROUSEL STYLING*/
+.carousel-wrapper {
+   align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.carousel-image {
+  width: 600px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  padding-left: 15%;
+}
+
+.carousel-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 50px;
+}
+
+.arrow-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  }
+
+.arrow-button img {
+  width: 40px;
+  height: auto;
+  transition: filter 0.3s ease;
+}
+
+.arrow-button:hover img {
+  filter: brightness(0) invert(1);  /* Changes image color to white on hover */
+}
+
+iframe{
+  margin-left: 80%;
+}
+/* END CAROUSEL STYLING*/
 
 #viz{
   /*border: solid black 4px;*/
@@ -46,8 +94,8 @@ h1{
 }
 
 #left-arrow, #right-arrow{
-  height: 60px;
-  width: auto;
+  height: px;
+  width: 15px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -65,13 +113,15 @@ h1{
 }
 
 #horizon{
-  border: solid 8px;
+  max-width: 2500px;
+  max-height: 1500px;
+  width: 100%;
+  height: auto; 
   display: block;
-  max-width: 70%;
-  padding:0;
-  height:auto;
-  margin: 0;
-  box-sizing: border-box;
+  margin: 0 auto;
+  border-radius: 10px;
+  margin-left:-38%;
+  
 }
 
 header {
@@ -109,7 +159,7 @@ header {
 .right-column {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
+  grid-template-rows: 1fr 1fr;
   gap: 20px;
 } 
 
@@ -134,8 +184,9 @@ header {
   
 } */
 #box1 {
-  width:700px;
-  height: 600px;
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
   max-width: 100%;
 }
 
@@ -147,38 +198,64 @@ header {
 }
 
 #box3 {
-  width:790px;
-  height: 800px;
+  grid-column: 1;
+  grid-row: 2;
+  margin: 0;
   max-width: 100%;
+  padding-bottom: 50px;
+}
 
-}
-.chart-container svg {
-  background-color: white;
-  display: block;
+#box4 {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
   max-width: 100%;
-  border-radius: 10px;
+  padding-bottom: 50px;
 }
+
+
+/*SVG Containers*/
+
+.chart-container {
+  width: 100%;
+  max-height: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+
 .responsive-svg {
   width: 100%;
   height: auto;
   display: block;
 }
-/* .svg-container {
-  position: relative;
-  width: 75%;
-  height: 400px;
-} */
-.svg-container {
-  width: 100%;
-  height: auto;
+
+.chart-container svg {
+  background-color: white;
+  display: block;
   max-width: 100%;
+  border-radius: 10px;
+  width:100%;
+  height:100%;
+  object-fit: contain;
 }
 
-.svg-container svg {
-  width: 100%;
-  height: auto;
-}
 
+.chart-container #articlesSvg {
+  background-color:white;
+  border-radius: 10px;
+  padding-left: 0px;
+  /* margin-left: 5%; */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
 #play-button {
   /* position: relative;
@@ -213,6 +290,7 @@ header {
   text-align: center;
   
 }
+/*SVG EDITS*/
 
 #svg{
   width: 100%;
@@ -226,6 +304,24 @@ header {
   width: 100%;
   height: auto;
   max-height: auto;
+}
+
+#articlesSvg {
+  width: 100%;
+  height: 100%;
+  max-height: auto;
+} 
+
+#missingSvg {
+
+  width: 100%;
+  height: auto;
+  max-height: auto;
+  margin:auto;
+  display: block;
+  padding-top: 20%;
+  padding-left: 8%;
+
 }
 
 
@@ -301,6 +397,7 @@ header {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-left: 20%;
 }
 
 .arrow-button:hover {
@@ -344,22 +441,6 @@ ul {
   padding: 0;
 }
 
-
-#articlesSvg {
-  display: block;
-  margin: auto;
-  width: 100%;
-  height: auto;
-}
-
-
-.chart-container #articleSVG {
-  background-color:white;
-  border-radius: 10px;
-  padding-left: 0px;
-  /* margin-left: 5%; */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 
 .tooltip {
   position: relative;
@@ -471,8 +552,4 @@ ul {
   padding: 20px;
   overflow-x: hidden;
   gap: 20px;
-}
-
-.chart-container {
-  display: none;
 }

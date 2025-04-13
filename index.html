@@ -9,7 +9,11 @@
 
     <main class="wrapper">
       <div class="left-column">
-        <h1>The Silence After</h1>
+        <h1>The Silence After
+        <img src="images/musical-note.png" id="music" alt="Music Icon" />
+          <audio id="bg-music" autoplay loop>
+            <source src="images/music.mp3" type="audio/mpeg">
+          </audio> </h1>
         <div class="left-column-content">
           <ul class="verse" id="verse1">
             <li class="line" id="line1">A wave of panic and dread washes over</li>
@@ -40,12 +44,14 @@
         <div class="poem-controls">
           <button class="arrow-button" id="backward-button">◄ Previous Line</button>
           <button class="arrow-button" id="forward-button">Next Line ►</button>
-          <img src="images/musical-note.png" id="music" alt="Music Icon" />
-          <audio id="bg-music" loop>
-            <source src="images/music.mp3" type="audio/mpeg">
-          </audio>
+          
         </div>
+
       </div>
+
+
+      
+
       <div class="right-column">
         <div id="box1" class="chart-container">
           <h3 class="chart-title">Deaths & Missing by Year</h3>
@@ -70,7 +76,41 @@
         <h3 class="chart-title">Articles Over Time</h3>
         <svg id="articlesSvg"></svg>
       </div>
-    </div>
+
+      <div id="box4" class="chart-container">
+        <h3 class="chart-title">Missing People by Gender </h3>
+        <svg id="missingSvg"></svg>
+      </div>
+
+
+
+      <br>
+      <br>
+      <br> 
+
+
+
+      </div>
+
+
+      <div class="carousel-wrapper">
+        
+    
+        <img id="horizon" src="images/toddler.png" alt="AI Image" class="carousel-image">
+
+        <div class="carousel-buttons">
+          <button class="arrow-button" onclick="prevImage()">
+            <img src="images/left-arrow.png" alt="Previous">
+          </button>
+          <button class="arrow-button" onclick="nextImage()">
+            <img src="images/right-arrow.png" alt="Next">
+          </button>
+      </div>
+
+<iframe src="https://humaneborders.info/app/mapa.asp" width = 1100px height = 600 style = "border: 2px;"></iframe> 
+
+
+  
   </div>
 
     </main>
