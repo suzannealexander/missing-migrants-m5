@@ -10,27 +10,7 @@ musicIcon.addEventListener("click", function() {
         audioElement.pause();
         musicIcon.src = "images/volume-mute.png";
     }});
-//-----------------------------------------------------------------------------------
 
-//JS for AI images
-
-// we need to track the images we will use for this vis display 
-
-const images = ["images/horizon.png", "images/cod1.png"];
-let currentIndex = 0;
-
-function updateImage(){
-    document.getElementById("horizon").src = images[currentIndex];
-}
-function prevImage(){
-    currentIndex = (currentIndex - 1) % images.length;
-    updateImage();
-}
-
-function nextImage(){
-    currentIndex = (currentIndex + 1) % images.length;
-    updateImage();
-}
 //-----------------------------------------------------------------------------------
 
 // First chart (Missing by Year)
@@ -43,6 +23,11 @@ const barMargin = { top: 20, right: 5, bottom: 170, left: 60 };
 const barWidth = 750;
 const barHeight = 550;
 
+// Four chart (Missing by Gender) 
+const missingMargin = { top: 20, right: 5, bottom: 170, left: 60 };
+const missingWidth = 750;
+const missingHeight = 550;
+
 // variables for the animated time chart
 let pathDead, pathMissing, lineForDead, lineForMissing;
 
@@ -52,7 +37,10 @@ let keyframes = [
     {
         activeVerse: 1,
         activeLines: [1],
-        svgUpdate: null
+        svgUpdate: () => {
+            drawMissingByGender();
+            showChart("box4");
+        }
     },
     {
         activeVerse: 1,
@@ -72,25 +60,32 @@ let keyframes = [
         activeLines: [4],
         svgUpdate: null
     },
+
     {
         activeVerse: 2,
         activeLines: [1],
         svgUpdate: () => {
-            animateChart();
-            showChart("box1");
+            drawMissingByGender();
+            showChart("box4");
         }
     },
+
     {
         activeVerse: 2,
         activeLines: [2],
-        svgUpdate: updateViolenceColor
+        svgUpdate: () => {
+            drawMissingByGender();
+            showChart("box4");
+            
+        }
     },
+
     {
         activeVerse: 2,
         activeLines: [3],
         svgUpdate: () => {
-            drawArticlesOverTime();
-            showChart("box3");
+            drawMissingByGender();
+            showChart("box4");
         }
     },
     {
@@ -191,6 +186,15 @@ let barSvg = d3.select("#causeOfDeathSvg")
     .classed("responsive-svg", true)
     .append("g")
     .attr("transform", "translate(" + barMargin.left + "," + barMargin.top + ")");
+
+// four svg
+let missingSvg = d3.select("#missingSvg")
+    .attr("viewBox", "0 0 " + (barWidth + barMargin.left + barMargin.right) + " " + (barHeight + barMargin.top + barMargin.bottom))
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .classed("responsive-svg", true)
+    .append("g")
+    .attr("transform", "translate(" + barMargin.left + "," + barMargin.top + ")");
+
 
 
 
@@ -415,6 +419,92 @@ function drawArticlesOverTime(){
 }
 
 
+
+function drawMissingByGender() {
+    // Your existing calculations
+    const missTotalMales = d3.sum(data, d => +d["Number of Males"]);
+    const missTotalFemales = d3.sum(data, d => +d["Number of Females"]);
+
+    const missGenderData = [
+        { gender: "Male", total: missTotalMales },
+        { gender: "Female", total: missTotalFemales }
+    ];
+
+    // Set dimensions for the missing gender bar chart
+    const missBarWidth = 800;
+    const missBarHeight = missBarWidth * 0.6;
+    const missBarMargin = { top: 20, right: 20, bottom: 40, left: 40 };
+
+    const missSvg = d3.select("#missingSvg")
+        .attr("width", missBarWidth)
+        .attr("height", missBarHeight);
+
+    const missX = d3.scaleBand()
+        .domain(missGenderData.map(d => d.gender))
+        .range([missBarMargin.left, missBarWidth - missBarMargin.right])
+        .padding(0.4);
+
+    const missY = d3.scaleLinear()
+        .domain([0, d3.max(missGenderData, d => d.total)])
+        .nice()
+        .range([missBarHeight - missBarMargin.bottom, missBarMargin.top]);
+
+    // Draw missing people bars
+    missSvg.selectAll("rect")
+        .data(missGenderData)
+        .enter()
+        .append("rect")
+        .attr("x", d => missX(d.gender))
+        .attr("y", d => missY(d.total))
+        .attr("width", missX.bandwidth())
+        .attr("height", d => missY(0) - missY(d.total))
+        .attr("fill", d => d.gender === "Female" ? "purple" : "steelblue");
+
+    // Add x-axis for missing chart
+    missSvg.append("g")
+        .attr("transform", `translate(0,${missBarHeight - missBarMargin.bottom})`)
+        .call(d3.axisBottom(missX))
+        .selectAll("text")
+        .style("font-size", "24px");
+
+    // Add y-axis for missing chart
+    missSvg.append("g")
+        .attr("transform", `translate(${missBarMargin.left},0)`)
+        .style("font-size", "24px")
+        .call(d3.axisLeft(missY));
+
+    // Axis labels for missing chart
+    missSvg.append("text")
+        .attr("x", missBarWidth / 2)
+        .attr("y", missBarHeight + 15)
+        .attr("text-anchor", "middle")
+        .text("Gender")
+        .style("font-size", "25px");
+
+    missSvg.append("text")
+        .attr("x", -missBarHeight / 2)
+        .attr("y", -60)
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "middle")
+        .style("font-size", "25px")
+        .text("Total Number Missing");
+
+    // Add caption to chart
+    missSvg.append("text")
+        .attr("x", missBarWidth / 2)
+        .attr("y", missBarHeight + 80)
+        .attr("text-anchor", "middle")
+        .style("font-size", "25px")
+        .style("fill", "black")
+        .text("Source: National Missing Persons Database, 2024");
+}
+
+
+
+
+
+
+
 // load data and make graph
 d3.csv('us_data.csv')
     .then(function (data) {
@@ -425,7 +515,6 @@ d3.csv('us_data.csv')
             d.Minimum_Estimated_Number_of_Missing = d['Minimum Estimated Number of Missing'] ? +d['Minimum Estimated Number of Missing'] : 0;
             d.Cause_of_Death = d['Cause of Death'];
         });
-
 
         // grouping the data by year
         const totalByYear = d3.group(data, d => d.Reported_Year);
@@ -443,6 +532,97 @@ d3.csv('us_data.csv')
 
         // sorting years in chronological order
         totals.sort((a,b) => +a.year - +b.year);
+
+
+
+
+
+
+
+
+
+        // Calculations for missing gender data ----------------------------------------------------------------------------------
+
+        const missTotalMales = d3.sum(data, d => +d["Number of Males"]);
+        const missTotalFemales = d3.sum(data, d => +d["Number of Females"]);
+
+        const missGenderData = [
+            { gender: "Male", total: missTotalMales },
+            { gender: "Female", total: missTotalFemales }
+        ];
+
+        // Set dimensions for the missing gender bar chart
+        const missBarWidth = 800;
+        const missBarHeight = missBarWidth *0.6;
+        const missBarMargin = { top: 20, right: 20, bottom: 40, left: 40 };
+
+        const missSvg = d3.select("#missingSvg")
+            .attr("width", missBarWidth)
+            .attr("height", missBarHeight);
+
+        const missX = d3.scaleBand()
+            .domain(missGenderData.map(d => d.gender))
+            .range([missBarMargin.left, missBarWidth - missBarMargin.right])
+            .padding(0.4);
+
+        const missY = d3.scaleLinear()
+            .domain([0, d3.max(missGenderData, d => d.total)])
+            .nice()
+            .range([missBarHeight - missBarMargin.bottom, missBarMargin.top]);
+
+
+        // Draw missing people bars
+        missSvg.selectAll("rect")
+            .data(missGenderData)
+            .enter()
+            .append("rect")
+            .attr("x", d => missX(d.gender))
+            .attr("y", d => missY(d.total))
+            .attr("width", missX.bandwidth())
+            .attr("height", d => missY(0) - missY(d.total))
+            .attr("fill", d => d.gender === "Female" ? "purple" : "steelblue");
+
+        // Add x-axis for missing chart
+        missSvg.append("g")
+            .attr("transform", `translate(0,${missBarHeight - missBarMargin.bottom})`)
+            .call(d3.axisBottom(missX))
+            .selectAll("text")
+            .style("font-size", "24px");
+
+        // Add y-axis for missing chart
+        missSvg.append("g")
+            .attr("transform", `translate(${missBarMargin.left},0)`)
+            .style("font-size", "24px")
+            .call(d3.axisLeft(missY));
+
+        // Axis labels for missing chart
+        missSvg.append("text")
+        .attr("x", missBarWidth / 2)
+        .attr("y", missBarHeight +15)
+        .attr("text-anchor", "middle")
+        .text("Gender")
+        .style("font-size", "25px");
+
+        missSvg.append("text")
+        .attr("x", -missBarHeight / 2)
+        .attr("y", -60)
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "middle")
+        .style("font-size", "25px")
+        .text("Total Number Missing");
+
+        // Add caption to chart
+        missSvg.append("text")
+        .attr("x", missBarWidth / 2)   // center horizontally
+        .attr("y", missBarHeight + 80) // a bit below the chart
+        .attr("text-anchor", "middle") // center the text
+        .style("font-size", "25px")    // set font size
+        .style("fill", "black")        // set text color
+        .text("Source: National Missing Persons Database, 2024");
+
+
+
+// --------------------------------------------------------------------------------------------------------------------------
 
         // preprocessing cause of death data
         // cause of death categories
@@ -670,7 +850,7 @@ causeYears.forEach(year => {
     })
 
 function showChart(boxIdToShow) {
-    const boxes = ["box1", "box2", "box3"];
+    const boxes = ["box1", "box2", "box3", "box4"];
     boxes.forEach(id => {
         const box = document.getElementById(id);
         if (id === boxIdToShow) {
@@ -811,8 +991,6 @@ document.addEventListener("DOMContentLoaded", function() {
     drawKeyframe(keyframeIndex);
 });
 
-
-
 async function initalize(){
     await loadData();
     drawMissingDeadLineGraph();
@@ -820,8 +998,6 @@ async function initalize(){
 }
 
 initalize();
-
-
 
 // reset highlights for cause of death words
 function resetDeathCauseHighlights() {

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Missing Migrants Project 
+        
+    </title>
+
+    <link rel="stylesheet" type="text/css" href="homestyle.css" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script>
+        let music, musicBtn;
+
+        window.onload = function() {
+            music = document.getElementById('bg-music');
+            musicBtn = document.getElementById('musicBtn');
+        }
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                musicBtn.src = "images/musical-note.png";  // change icon
+            } else {
+                music.pause();
+                musicBtn.src = "images/volume-mute.png";  // back to original
+            }
+        }
+    </script>
+
+  </head>
+  <body>
+    <div class = "vertical-center">
+    <div style="position: relative; width: 100%; height: 100vh; margin: 0; overflow: hidden;">
+        <video id="bgVideo" autoplay loop playsinline 
+               style="position: absolute; top: 0; left: 0; 
+                      width: 99%; height: 105%; 
+                      border: solid black 5px;
+                      object-fit: cover;">
+            <source src="images/MMData.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    
+        <!-- Click to Play Prompt -->
+        <button id="playPrompt" 
+        style="position: absolute; top: 50%; left: 50%;
+               transform: translate(-50%, -50%);
+               background: rgba(0, 0, 0, 0.7);
+               color: white; padding: 20px 40px;
+               border: none;
+               border-radius: 10px; cursor: pointer;
+               text-align: center; font-size: 20px;">
+          ▶ Click to Play Video
+</button>
+    </div>
+    
+    <script>
+        const video = document.getElementById('bgVideo');
+        const prompt = document.getElementById('playPrompt');
+        prompt.addEventListener('click', function() {
+            video.muted = false;
+            video.play();
+            prompt.style.display = 'none';
+        });
+    </script>
+            
+        
+   
+
+  
+
+    <h1> 
+        <img src = "images/migrants.png" img src = "images/migrants.png" img src = "images/migrants.png"id = "migrants"> The <img src = "images/missing.png" id = "missing"> Migrants Project  <img src = "images/migrants.png" id = "migrants"> 
+       
+    </h1>
+    </div>
+    </div>
+
+    </div>
+   
+    
+</div>
+
+</div>
+
+ 
+    <!--Frames for videos -->
+   
+
+<br>
+
+   <!--Missing Image and migrants art-->
+   
+    
+
+<div style = "text-align: center;">
+    <button  href = "index.html">
+        <span class = "button_top">
+            <a href="index.html" 
+            style="display: inline-block; 
+                    color: black;
+                    text-decoration: none; 
+                    padding: 10px 20px; 
+                    border-radius: 8px;
+                    font-size: 16px;
+                    cursor: pointer;">
+                View Data
+            </a>
+          
+        </span>
+    </button>  
+    <br>
+    <br>
+</div>
+
+
+    </body>
+</html>
+
+

@@ -1,0 +1,127 @@
+
+.vertical-center{
+    background-color: burlywood;
+    padding: 0px;
+}
+body {
+    background-image: url('images/map-bg.png');
+    color:black;
+}
+
+h1{
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    color: black;
+    background-color: burlywood;
+    padding-bottom: 50px;
+}
+
+h4{
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    background-color: burlywood;
+}
+
+
+#migrants{
+    align-content: center;
+    justify-content: center;
+    size: 20px;
+    width: 70px;
+    border:5px;
+}
+
+#musicBtn{
+    width:15px;
+    height: 10px;
+    
+    background: url('images/music-icon.png') no-repeat center/cover;
+    border: none;
+    cursor: pointer;
+}
+
+#missing{
+    height: 70px;
+    width: 200px;
+}
+
+iframe{
+    border:13px solid black;
+    align-content: center;
+}
+
+.vid{
+    align-content: center;
+    align-self: center;
+    text-align: center;
+    width: 100%;
+    height: 400px;
+    background-image: url('MMData.mp4');
+}
+.video-background {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+}
+
+.video-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+}
+
+.video-background .content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+}
+
+
+
+/*BUTTON*/
+
+button {
+    /* Variables */
+    --button_radius: 0.75em;
+    --button_color: #e8e8e8;
+    --button_outline_color: #000000;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--button_radius);
+    background: var(--button_outline_color);
+  }
+  
+  .button_top {
+    display: block;
+    box-sizing: border-box;
+    border: 2px solid var(--button_outline_color);
+    border-radius: var(--button_radius);
+    padding: 0.75em 1.5em;
+    background: var(--button_color);
+    color: var(--button_outline_color);
+    transform: translateY(-0.2em);
+    transition: transform 0.1s ease;
+
+    align-content: center;
+  }
+  
+  button:hover .button_top {
+    /* Pull the button upwards when hovered */
+    transform: translateY(-0.33em);
+  }
+  
+  button:active .button_top {
+    /* Push the button downwards when pressed */
+    transform: translateY(0);
+  }
+  
