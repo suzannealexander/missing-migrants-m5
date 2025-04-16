@@ -59,12 +59,18 @@ let keyframes = [
     {
         activeVerse: 1,
         activeLines: [3],
-        svgUpdate: updateDrowningColor
+        svgUpdate: () => {
+            animateChart();
+            showChart("box1");
+        }
     },
     {
         activeVerse: 1,
         activeLines: [4],
-        svgUpdate: null
+        svgUpdate: () => {
+            animateChart();
+            showChart("box1");
+        }
     },
 
     {
@@ -79,25 +85,37 @@ let keyframes = [
     {
         activeVerse: 2,
         activeLines: [2],
-        svgUpdate: null            
+        svgUpdate: () => {
+            drawMissingByGender();
+            showChart("box4");
+        }        
     },
 
     {
         activeVerse: 2,
         activeLines: [3],
-        svgUpdate: null        
+        svgUpdate: () => {
+            drawArticlesOverTime();
+            showChart("box3");
+        }
     },
 
     {
         activeVerse: 2,
         activeLines: [4],
-        svgUpdate: null
+        svgUpdate: () => {
+            drawArticlesOverTime();
+            showChart("box3");
+        }
     },
 
     {
         activeVerse: 2,
         activeLines: [5],
-        svgUpdate: null
+        svgUpdate: () => {
+            drawArticlesOverTime();
+            showChart("box3");
+        }
     },
     {
         activeVerse: 2,
@@ -146,8 +164,8 @@ let keyframes = [
     {
         activeVerse: 3,
         activeLines: [2],
-        // svgUpdate: updateVehicleAccidentColor
-    },
+        svgUpdate: null
+        },
     {
         activeVerse: 3,
         activeLines: [3],
