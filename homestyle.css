@@ -1,7 +1,6 @@
 
 .vertical-center{
     background-color: burlywood;
-    padding: 0px;
 }
 body {
     background-image: url('images/map-bg.png');
@@ -49,8 +48,7 @@ h4{
 
 iframe{
     border:13px solid black;
-    align-content: center;
-    
+    align-content: center; 
 }
 
 .vid{
