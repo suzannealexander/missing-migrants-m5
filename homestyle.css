@@ -1,9 +1,9 @@
 
-.vertical-center{
+/* .vertical-center{
     background-color: burlywood;
-}
+} */
 body {
-    background-image: url('images/map-bg.png');
+    /* background-image: url('images/map-bg.png'); */
     color:black;
 }
 
@@ -12,7 +12,7 @@ h1{
     align-content: center;
     justify-content: center;
     color: black;
-    background-color: burlywood;
+    /* background-color: burlywood; */
     padding-bottom: 50px;
 }
 
@@ -20,7 +20,7 @@ h4{
     text-align: center;
     align-content: center;
     justify-content: center;
-    background-color: burlywood;
+    /* background-color: burlywood; */
 }
 
 
@@ -124,4 +124,47 @@ button {
     /* Push the button downwards when pressed */
     transform: translateY(0);
   }
+  
+
+
+
+  .nav-button-left{
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    font-size: 48px;
+    color: white;
+    text-decoration: none;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 15px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+  }
+  
+  .nav-button-left:hover {
+    background: rgba(105, 105, 105, 0.4);
+  }
+
+
+.nav-button-right{
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 48px;
+    color: white;
+    text-decoration: none;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 15px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+  }
+  
+  .nav-button-right:hover {
+    background: rgba(105, 105, 105, 0.4);
+  }
+  
   

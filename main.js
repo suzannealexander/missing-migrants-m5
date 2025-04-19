@@ -5,10 +5,10 @@ const audioElement = document.getElementById("bg-music");
 musicIcon.addEventListener("click", function() {
     if (audioElement.paused) {
         audioElement.play();
-        musicIcon.src = "images/musical-note.png";
+        musicIcon.src = "images/white-volume.png";
     } else {
         audioElement.pause();
-        musicIcon.src = "images/volume-mute.png";
+        musicIcon.src = "images/white_mute.png";
     }});
 //-----------------------------------------------------------------------------------
 
@@ -283,6 +283,15 @@ function drawMissingDeadLineGraph(){
         .y(d => yScale(d.totalMissing))
         .curve(d3.curveMonotoneX);
 
+    // Chart Title
+    svg.append("text")
+        .attr("x", w / 2)
+        .attr("y", -20)
+        .attr("text-anchor", "middle")
+        .style("font-size", "20px")
+        .style("fill", "black")
+        .text("Total Dead & Missing Over Time");
+
 
     pathDead = svg.append("path")
         .datum(totals)
@@ -353,9 +362,7 @@ function drawMissingDeadLineGraph(){
 
 function drawArticlesOverTime(){
     const dots = [];
-    console.log(rawData)
     const grouped = d3.group(rawData, d => d.Reported_Year);
-    console.log("Grouped data:", grouped);
 
     grouped.forEach((entries, year) => {
         entries.forEach((d, i) => {
@@ -416,6 +423,15 @@ function drawArticlesOverTime(){
         .attr("text-anchor", "middle")
         .attr("transform", "rotate(-90)")
         .text("Frequency");
+
+    // Chart Title
+    freqSvg.append("text")
+        .attr("x", freqWidth / 2)
+        .attr("y", -1)
+        .attr("text-anchor", "middle")
+        .style("font-size", "20px")
+        .style("fill", "black")
+        .text("Articles By Year");
 
     freqSvg.selectAll("circle")
         .data(dots)
@@ -516,12 +532,14 @@ function drawMissingByGender() {
         .style("font-size", "25px")
         .style("fill", "black")
         .text("Source: National Missing Persons Database, 2024");
+        missSvg.append("text")
+        .attr("x", missBarWidth / 2)
+        .attr("y", missBarMargin.top)
+        .attr("text-anchor", "middle")
+        .style("font-size", "20px")
+        .style("fill", "black")
+        .text("Missing By Gender");   
 }
-
-
-
-
-
 
 
 // load data and make graph
@@ -551,14 +569,6 @@ d3.csv('us_data.csv')
 
         // sorting years in chronological order
         totals.sort((a,b) => +a.year - +b.year);
-
-
-
-
-
-
-
-
 
         // Calculations for missing gender data ----------------------------------------------------------------------------------
 
@@ -866,6 +876,14 @@ causeYears.forEach(year => {
             .attr("text-anchor", "middle")
             .attr("transform", "rotate(-90)")
             .text("Frequency");
+
+        barSvg.append("text")
+        .attr("x", barHeight / 2)
+        .attr("y", barMargin.top)
+        .attr("text-anchor", "middle")
+        .style("font-size", "20px")
+        .style("fill", "black")
+        .text("Cause of Death Over Time");
     })
 
 function showChart(boxIdToShow) {

@@ -1,0 +1,64 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body > .container {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    position: relative; /* Make sure the container is positioned properly */
+}
+
+body .container iframe {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    display: block !important;
+}
+
+.nav-button-left{
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    font-size: 48px;
+    color: white;
+    text-decoration: none;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 15px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+  }
+  
+  .nav-button-left:hover {
+    background: rgba(105, 105, 105, 0.4);
+  }
+
+
+.nav-button-right{
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 48px;
+    color: white;
+    text-decoration: none;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 15px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+  }
+  
+  .nav-button-right:hover {
+    background: rgba(105, 105, 105, 0.4);
+  }
+  
+  
