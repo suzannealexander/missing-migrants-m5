@@ -1,7 +1,7 @@
 # The Missing Migrants Project
 Suzanne Alexander, Sunghyun Kim, Shaniah Reece
 
-[Access the static visualization](https://suzannealexander.github.io/missing-migrants-m5/)
+[Access the interactive webpage](https://suzannealexander.github.io/missing-migrants-m5/)
 
 ## Running the code locally
 - Clone the repository, with the command `git clone https://github.com/suzannealexander/missing-migrants-m5.git`
